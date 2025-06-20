@@ -6,13 +6,14 @@
     <title>Dibuja un Círculo Perfecto 2025</title>
     <style>
         :root {
-            --primary: #6e48aa;
-            --secondary: #9d50bb;
-            --accent: #4776e6;
-            --dark: #1a1a2e;
-            --light: #f8f9fa;
-            --success: #4cc9f0;
-            --glass: rgba(255, 255, 255, 0.15);
+            --primary: #FF6B00;
+            --secondary: #FF9500;
+            --accent: #FFAA00;
+            --dark: #121212;
+            --light: #F5F5F5;
+            --success: #FF8C00;
+            --glass: rgba(0, 0, 0, 0.3);
+            --particle: #FFA500;
         }
         
         body {
@@ -20,13 +21,15 @@
             text-align: center;
             margin: 0;
             padding: 20px;
-            background: linear-gradient(135deg, var(--dark), #16213e);
+            background: linear-gradient(135deg, #000000, #121212);
             color: var(--light);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            overflow: hidden;
+            position: relative;
         }
         
         h1 {
@@ -36,7 +39,7 @@
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            text-shadow: 0 2px 10px rgba(255, 140, 0, 0.3);
         }
         
         .container {
@@ -44,10 +47,13 @@
             backdrop-filter: blur(10px);
             border-radius: 20px;
             padding: 2rem;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(255, 106, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.05);
             max-width: 500px;
             width: 90%;
+            transition: all 0.5s ease;
+            position: relative;
+            z-index: 10;
         }
         
         #instructions {
@@ -55,20 +61,21 @@
             font-size: 1.1rem;
             line-height: 1.6;
             opacity: 0.9;
+            color: rgba(255, 255, 255, 0.8);
         }
         
         #canvas {
-            border: 2px solid var(--glass);
+            border: 2px solid rgba(255, 140, 0, 0.3);
             border-radius: 15px;
             margin: 1.5rem auto;
             display: block;
-            background-color: rgba(0, 0, 0, 0.2);
+            background-color: rgba(0, 0, 0, 0.3);
             cursor: crosshair;
             transition: box-shadow 0.3s;
         }
         
         #canvas:hover {
-            box-shadow: 0 0 30px rgba(78, 115, 230, 0.3);
+            box-shadow: 0 0 30px rgba(255, 140, 0, 0.3);
         }
         
         #result {
@@ -79,6 +86,7 @@
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
         }
         
         button {
@@ -86,19 +94,20 @@
             font-size: 1rem;
             font-weight: 600;
             background: linear-gradient(45deg, var(--primary), var(--secondary));
-            color: white;
+            color: black;
             border: none;
             border-radius: 50px;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(110, 72, 170, 0.4);
+            box-shadow: 0 4px 15px rgba(255, 106, 0, 0.4);
             position: relative;
             overflow: hidden;
         }
         
         button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(110, 72, 170, 0.6);
+            box-shadow: 0 6px 20px rgba(255, 106, 0, 0.6);
+            color: white;
         }
         
         button:active {
@@ -145,6 +154,7 @@
             stroke-linecap: round;
             fill: none;
             transition: stroke-dashoffset 0.5s ease;
+            filter: drop-shadow(0 0 5px rgba(255, 140, 0, 0.7));
         }
         
         .ai-feedback {
@@ -152,6 +162,57 @@
             margin-top: 1rem;
             font-style: italic;
             opacity: 0.8;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        /* Estilos para el mensaje de límite */
+        .limit-message {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(18, 18, 18, 0.95);
+            z-index: 100;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .limit-message h2 {
+            font-size: 2rem;
+            color: var(--success);
+            margin-bottom: 1rem;
+            text-shadow: 0 0 10px rgba(255, 140, 0, 0.5);
+        }
+        
+        .limit-message p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            max-width: 500px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .timer {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--accent);
+            margin: 1rem 0;
+            font-family: monospace;
+            text-shadow: 0 0 10px rgba(255, 170, 0, 0.5);
+        }
+        
+        /* Partículas */
+        .particle {
+            position: absolute;
+            background-color: var(--particle);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.7;
         }
         
         @media (max-width: 600px) {
@@ -167,11 +228,23 @@
                 width: 300px;
                 height: 300px;
             }
+            
+            .limit-message h2 {
+                font-size: 1.5rem;
+            }
+            
+            .limit-message p {
+                font-size: 1rem;
+            }
+            
+            .timer {
+                font-size: 2rem;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="container" id="main-container">
         <h1>Dibuja un Círculo Perfecto</h1>
         <div id="instructions">
             Usa tu dedo o el mouse para dibujar un círculo. Suelta para evaluar tu precisión.
@@ -190,6 +263,13 @@
         <button id="reset">Intentar de nuevo</button>
     </div>
 
+    <div class="limit-message" id="limit-message">
+        <h2>¡Límite de intentos alcanzado!</h2>
+        <p>Has alcanzado el máximo de 5 intentos. Por favor, espera 1 hora para volver a intentarlo.</p>
+        <div class="timer" id="timer">01:00:00</div>
+        <p>Mientras tanto, podrías practicar dibujando círculos en papel. ¡La práctica hace al maestro!</p>
+    </div>
+
     <script>
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
@@ -197,14 +277,27 @@
         const feedbackDiv = document.getElementById('feedback');
         const resetBtn = document.getElementById('reset');
         const progressCircle = document.querySelector('.progress-ring__circle-fill');
+        const mainContainer = document.getElementById('main-container');
+        const limitMessage = document.getElementById('limit-message');
+        const timerDisplay = document.getElementById('timer');
         
         let isDrawing = false;
         let points = [];
         let center = { x: 0, y: 0 };
         let radius = 0;
+        let attempts = 0;
+        let cooldownTimeout;
+        let timerInterval;
+        let particles = [];
+        
+        // Verificar si hay un límite activo en el localStorage
+        checkAttemptLimit();
         
         // Configuración inicial del canvas
         reset();
+        
+        // Crear partículas
+        createParticles();
         
         // Event listeners para mouse y pantalla táctil
         canvas.addEventListener('mousedown', startDrawing);
@@ -246,12 +339,12 @@
             feedbackDiv.textContent = '';
             
             // Configuración del estilo de dibujo
-            ctx.strokeStyle = '#4cc9f0';
+            ctx.strokeStyle = '#FF8C00';
             ctx.lineWidth = 4;
             ctx.lineJoin = 'round';
             ctx.lineCap = 'round';
-            ctx.shadowBlur = 10;
-            ctx.shadowColor = 'rgba(76, 201, 240, 0.7)';
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = 'rgba(255, 140, 0, 0.7)';
             
             // Registrar el primer punto
             const rect = canvas.getBoundingClientRect();
@@ -261,6 +354,9 @@
             
             ctx.beginPath();
             ctx.moveTo(x, y);
+            
+            // Crear partículas al empezar a dibujar
+            createParticlesAtPoint(x, y);
         }
         
         function draw(e) {
@@ -274,11 +370,23 @@
             
             ctx.lineTo(x, y);
             ctx.stroke();
+            
+            // Crear partículas mientras se dibuja
+            if (points.length % 3 === 0) {
+                createParticlesAtPoint(x, y);
+            }
         }
         
         function stopDrawing() {
             if (!isDrawing) return;
             isDrawing = false;
+            
+            // Incrementar el contador de intentos solo si se dibujó algo
+            if (points.length > 5) {
+                attempts++;
+                localStorage.setItem('circleAttempts', attempts);
+                localStorage.setItem('lastAttemptTime', Date.now());
+            }
             
             // Calcular el círculo perfecto que mejor se ajusta
             calculateBestFitCircle();
@@ -286,10 +394,14 @@
             // Dibujar el círculo perfecto
             ctx.beginPath();
             ctx.arc(center.x, center.y, radius, 0, Math.PI * 2);
-            ctx.strokeStyle = 'rgba(233, 30, 99, 0.7)';
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
             ctx.lineWidth = 3;
-            ctx.shadowBlur = 0;
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = 'rgba(255, 140, 0, 0.7)';
             ctx.stroke();
+            
+            // Explosión de partículas al soltar
+            createParticleExplosion(center.x, center.y, radius);
             
             // Calcular precisión
             const accuracy = calculateAccuracy();
@@ -298,6 +410,19 @@
             
             // Mostrar feedback de IA
             showAIFeedback(accuracy);
+            
+            // Verificar si se alcanzó el 100% de precisión
+            if (accuracy >= 100) {
+                setTimeout(() => {
+                    window.location.href = 'reclamarregalo.html';
+                }, 1500);
+                return;
+            }
+            
+            // Verificar si se alcanzó el límite de intentos
+            if (attempts >= 5) {
+                showLimitMessage();
+            }
         }
         
         function calculateBestFitCircle() {
@@ -377,13 +502,17 @@
             
             // Cambiar color basado en el porcentaje
             if (percentage > 90) {
-                progressCircle.style.stroke = '#4cc9f0';
+                progressCircle.style.stroke = '#FF8C00';
+                progressCircle.style.filter = 'drop-shadow(0 0 10px rgba(255, 140, 0, 0.9))';
             } else if (percentage > 70) {
-                progressCircle.style.stroke = '#a6e22e';
+                progressCircle.style.stroke = '#FFA500';
+                progressCircle.style.filter = 'drop-shadow(0 0 8px rgba(255, 165, 0, 0.7))';
             } else if (percentage > 50) {
-                progressCircle.style.stroke = '#fd971f';
+                progressCircle.style.stroke = '#FF6B00';
+                progressCircle.style.filter = 'drop-shadow(0 0 6px rgba(255, 107, 0, 0.5))';
             } else {
-                progressCircle.style.stroke = '#f92672';
+                progressCircle.style.stroke = '#FF4500';
+                progressCircle.style.filter = 'drop-shadow(0 0 4px rgba(255, 69, 0, 0.3))';
             }
         }
         
@@ -415,10 +544,10 @@
         
         function reset() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.strokeStyle = '#4cc9f0';
+            ctx.strokeStyle = '#FF8C00';
             ctx.lineWidth = 4;
-            ctx.shadowBlur = 10;
-            ctx.shadowColor = 'rgba(76, 201, 240, 0.7)';
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = 'rgba(255, 140, 0, 0.7)';
             resultDiv.textContent = '';
             feedbackDiv.textContent = '';
             points = [];
@@ -426,7 +555,189 @@
             
             // Resetear el anillo de progreso
             progressCircle.style.strokeDashoffset = '282.743';
-            progressCircle.style.stroke = '#4cc9f0';
+            progressCircle.style.stroke = '#FF8C00';
+            progressCircle.style.filter = 'drop-shadow(0 0 5px rgba(255, 140, 0, 0.7))';
+        }
+        
+        function showLimitMessage() {
+            mainContainer.style.display = 'none';
+            limitMessage.style.display = 'flex';
+            
+            // Establecer el tiempo de espera (1 hora = 3600000 ms)
+            const waitTime = 3600000;
+            const endTime = Date.now() + waitTime;
+            
+            // Actualizar el temporizador cada segundo
+            updateTimer(endTime);
+            timerInterval = setInterval(() => updateTimer(endTime), 1000);
+            
+            // Configurar el timeout para cuando termine el tiempo de espera
+            cooldownTimeout = setTimeout(() => {
+                clearInterval(timerInterval);
+                attempts = 0;
+                localStorage.removeItem('circleAttempts');
+                localStorage.removeItem('lastAttemptTime');
+                limitMessage.style.display = 'none';
+                mainContainer.style.display = 'block';
+                reset();
+            }, waitTime);
+        }
+        
+        function updateTimer(endTime) {
+            const now = Date.now();
+            const remaining = Math.max(0, endTime - now);
+            
+            const hours = Math.floor(remaining / (1000 * 60 * 60));
+            const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((remaining % (1000 * 60)) / 1000);
+            
+            timerDisplay.textContent = 
+                `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+        
+        function checkAttemptLimit() {
+            const savedAttempts = localStorage.getItem('circleAttempts');
+            const lastAttemptTime = localStorage.getItem('lastAttemptTime');
+            
+            if (savedAttempts) {
+                attempts = parseInt(savedAttempts);
+                
+                // Verificar si ha pasado 1 hora desde el último intento
+                if (lastAttemptTime && (Date.now() - parseInt(lastAttemptTime)) < 3600000) {
+                    if (attempts >= 5) {
+                        showLimitMessage();
+                        
+                        // Calcular el tiempo restante
+                        const timePassed = Date.now() - parseInt(lastAttemptTime);
+                        const remainingTime = 3600000 - timePassed;
+                        
+                        // Configurar el timeout para el tiempo restante
+                        cooldownTimeout = setTimeout(() => {
+                            clearInterval(timerInterval);
+                            attempts = 0;
+                            localStorage.removeItem('circleAttempts');
+                            localStorage.removeItem('lastAttemptTime');
+                            limitMessage.style.display = 'none';
+                            mainContainer.style.display = 'block';
+                            reset();
+                        }, remainingTime);
+                        
+                        // Iniciar el temporizador
+                        const endTime = parseInt(lastAttemptTime) + 3600000;
+                        updateTimer(endTime);
+                        timerInterval = setInterval(() => updateTimer(endTime), 1000);
+                    }
+                } else {
+                    // Si ha pasado más de 1 hora, resetear los intentos
+                    attempts = 0;
+                    localStorage.removeItem('circleAttempts');
+                    localStorage.removeItem('lastAttemptTime');
+                }
+            }
+        }
+        
+        // Sistema de partículas
+        function createParticles() {
+            for (let i = 0; i < 50; i++) {
+                particles.push({
+                    x: Math.random() * window.innerWidth,
+                    y: Math.random() * window.innerHeight,
+                    size: Math.random() * 3 + 1,
+                    speedX: Math.random() * 0.5 - 0.25,
+                    speedY: Math.random() * 0.5 - 0.25,
+                    opacity: Math.random() * 0.5 + 0.1
+                });
+            }
+            
+            animateParticles();
+        }
+        
+        function createParticlesAtPoint(x, y) {
+            const canvasRect = canvas.getBoundingClientRect();
+            const globalX = x + canvasRect.left;
+            const globalY = y + canvasRect.top;
+            
+            for (let i = 0; i < 5; i++) {
+                particles.push({
+                    x: globalX,
+                    y: globalY,
+                    size: Math.random() * 4 + 2,
+                    speedX: Math.random() * 2 - 1,
+                    speedY: Math.random() * 2 - 1,
+                    opacity: Math.random() * 0.7 + 0.3,
+                    life: 100
+                });
+            }
+        }
+        
+        function createParticleExplosion(x, y, radius) {
+            const canvasRect = canvas.getBoundingClientRect();
+            const globalX = x + canvasRect.left;
+            const globalY = y + canvasRect.top;
+            const particleCount = Math.min(100, Math.floor(radius * 2));
+            
+            for (let i = 0; i < particleCount; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const speed = Math.random() * 3 + 1;
+                const distance = Math.random() * radius * 0.7;
+                
+                particles.push({
+                    x: globalX + Math.cos(angle) * distance,
+                    y: globalY + Math.sin(angle) * distance,
+                    size: Math.random() * 3 + 1,
+                    speedX: Math.cos(angle) * speed,
+                    speedY: Math.sin(angle) * speed,
+                    opacity: Math.random() * 0.7 + 0.3,
+                    life: 100
+                });
+            }
+        }
+        
+        function animateParticles() {
+            // Limpiar partículas antiguas
+            particles = particles.filter(p => !p.life || p.life-- > 0);
+            
+            // Mover y dibujar partículas
+            const particleElements = [];
+            
+            particles.forEach(p => {
+                p.x += p.speedX;
+                p.y += p.speedY;
+                
+                // Rebotar en los bordes
+                if (p.x < 0 || p.x > window.innerWidth) p.speedX *= -1;
+                if (p.y < 0 || p.y > window.innerHeight) p.speedY *= -1;
+                
+                // Crear elemento de partícula si no existe
+                if (!p.element) {
+                    p.element = document.createElement('div');
+                    p.element.className = 'particle';
+                    p.element.style.width = `${p.size}px`;
+                    p.element.style.height = `${p.size}px`;
+                    p.element.style.backgroundColor = `rgba(255, 165, 0, ${p.opacity})`;
+                    document.body.appendChild(p.element);
+                }
+                
+                // Actualizar posición
+                p.element.style.left = `${p.x - p.size / 2}px`;
+                p.element.style.top = `${p.y - p.size / 2}px`;
+                
+                // Efecto de desvanecimiento para partículas con vida limitada
+                if (p.life) {
+                    p.element.style.opacity = p.opacity * (p.life / 100);
+                }
+                
+                particleElements.push(p.element);
+            });
+            
+            // Eliminar partículas antiguas del DOM
+            document.querySelectorAll('.particle').forEach(el => {
+                if (!particleElements.includes(el)) {
+                    el.remove();
+                }
+            });
+            
+            requestAnimationFrame(animateParticles);
         }
     </script>
 </body>

@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dibuja un Círculo Perfecto 2025</title>
+    <style>
+        :root {
+            --primary: #6e48aa;
+            --secondary: #9d50bb;
+            --accent: #4776e6;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --success: #4cc9f0;
+            --glass: rgba(255, 255, 255, 0.15);
+        }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--dark), #16213e);
+            color: var(--light);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(to right, var(--success), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .container {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            max-width: 500px;
+            width: 90%;
+        }
+        
+        #instructions {
+            margin: 1.5rem 0;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+        
+        #canvas {
+            border: 2px solid var(--glass);
+            border-radius: 15px;
+            margin: 1.5rem auto;
+            display: block;
+            background-color: rgba(0, 0, 0, 0.2);
+            cursor: crosshair;
+            transition: box-shadow 0.3s;
+        }
+        
+        #canvas:hover {
+            box-shadow: 0 0 30px rgba(78, 115, 230, 0.3);
+        }
+        
+        #result {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin: 1.5rem;
+            background: linear-gradient(to right, var(--success), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        button {
+            padding: 12px 28px;
+            font-size: 1rem;
+            font-weight: 600;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(110, 72, 170, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(110, 72, 170, 0.6);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        button::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+        
+        button:hover::after {
+            transform: translateX(100%);
+        }
+        
+        .progress-ring {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: 20px auto;
+        }
+        
+        .progress-ring__circle {
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+        
+        .progress-ring__circle-bg {
+            stroke: rgba(255, 255, 255, 0.1);
+            stroke-width: 6;
+            fill: none;
+        }
+        
+        .progress-ring__circle-fill {
+            stroke: var(--success);
+            stroke-width: 6;
+            stroke-linecap: round;
+            fill: none;
+            transition: stroke-dashoffset 0.5s ease;
+        }
+        
+        .ai-feedback {
+            font-size: 1rem;
+            margin-top: 1rem;
+            font-style: italic;
+            opacity: 0.8;
+        }
+        
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .container {
+                padding: 1.5rem;
+            }
+            
+            #canvas {
+                width: 300px;
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Dibuja un Círculo Perfecto</h1>
+        <div id="instructions">
+            Usa tu dedo o el mouse para dibujar un círculo. Suelta para evaluar tu precisión.
+        </div>
+        <canvas id="canvas" width="400" height="400"></canvas>
+        
+        <div class="progress-ring">
+            <svg viewBox="0 0 100 100">
+                <circle class="progress-ring__circle-bg" cx="50" cy="50" r="45" />
+                <circle class="progress-ring__circle-fill" cx="50" cy="50" r="45" stroke-dasharray="282.743" stroke-dashoffset="282.743" />
+            </svg>
+        </div>
+        
+        <div id="result"></div>
+        <div id="feedback" class="ai-feedback"></div>
+        <button id="reset">Intentar de nuevo</button>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const resultDiv = document.getElementById('result');
+        const feedbackDiv = document.getElementById('feedback');
+        const resetBtn = document.getElementById('reset');
+        const progressCircle = document.querySelector('.progress-ring__circle-fill');
+        
+        let isDrawing = false;
+        let points = [];
+        let center = { x: 0, y: 0 };
+        let radius = 0;
+        
+        // Configuración inicial del canvas
+        reset();
+        
+        // Event listeners para mouse y pantalla táctil
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mouseout', stopDrawing);
+        
+        canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
+        canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
+        canvas.addEventListener('touchend', stopDrawing);
+        
+        resetBtn.addEventListener('click', reset);
+        
+        function handleTouchStart(e) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const mouseEvent = new MouseEvent('mousedown', {
+                clientX: touch.clientX,
+                clientY: touch.clientY
+            });
+            canvas.dispatchEvent(mouseEvent);
+        }
+        
+        function handleTouchMove(e) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const mouseEvent = new MouseEvent('mousemove', {
+                clientX: touch.clientX,
+                clientY: touch.clientY
+            });
+            canvas.dispatchEvent(mouseEvent);
+        }
+        
+        function startDrawing(e) {
+            isDrawing = true;
+            points = [];
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            resultDiv.textContent = '';
+            feedbackDiv.textContent = '';
+            
+            // Configuración del estilo de dibujo
+            ctx.strokeStyle = '#4cc9f0';
+            ctx.lineWidth = 4;
+            ctx.lineJoin = 'round';
+            ctx.lineCap = 'round';
+            ctx.shadowBlur = 10;
+            ctx.shadowColor = 'rgba(76, 201, 240, 0.7)';
+            
+            // Registrar el primer punto
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            points.push({ x, y });
+            
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+        }
+        
+        function draw(e) {
+            if (!isDrawing) return;
+            
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            points.push({ x, y });
+            
+            ctx.lineTo(x, y);
+            ctx.stroke();
+        }
+        
+        function stopDrawing() {
+            if (!isDrawing) return;
+            isDrawing = false;
+            
+            // Calcular el círculo perfecto que mejor se ajusta
+            calculateBestFitCircle();
+            
+            // Dibujar el círculo perfecto
+            ctx.beginPath();
+            ctx.arc(center.x, center.y, radius, 0, Math.PI * 2);
+            ctx.strokeStyle = 'rgba(233, 30, 99, 0.7)';
+            ctx.lineWidth = 3;
+            ctx.shadowBlur = 0;
+            ctx.stroke();
+            
+            // Calcular precisión
+            const accuracy = calculateAccuracy();
+            updateProgressRing(accuracy);
+            resultDiv.textContent = `${accuracy.toFixed(1)}% de precisión`;
+            
+            // Mostrar feedback de IA
+            showAIFeedback(accuracy);
+        }
+        
+        function calculateBestFitCircle() {
+            // Algoritmo de ajuste de círculo por mínimos cuadrados
+            
+            // Paso 1: Calcular centro aproximado
+            let sumX = 0, sumY = 0;
+            for (const point of points) {
+                sumX += point.x;
+                sumY += point.y;
+            }
+            center.x = sumX / points.length;
+            center.y = sumY / points.length;
+            
+            // Paso 2: Calcular radio promedio con ajuste iterativo
+            let sumR = 0;
+            let radii = [];
+            
+            for (const point of points) {
+                const dx = point.x - center.x;
+                const dy = point.y - center.y;
+                const r = Math.sqrt(dx * dx + dy * dy);
+                sumR += r;
+                radii.push(r);
+            }
+            
+            // Calcular desviación estándar para ajuste fino
+            const meanRadius = sumR / points.length;
+            let squaredDifferences = 0;
+            
+            for (const r of radii) {
+                squaredDifferences += Math.pow(r - meanRadius, 2);
+            }
+            
+            const stdDev = Math.sqrt(squaredDifferences / points.length);
+            
+            // Filtrar outliers (más de 1.5 desviaciones estándar)
+            const filteredRadii = radii.filter(r => Math.abs(r - meanRadius) <= 1.5 * stdDev);
+            
+            // Calcular radio final con datos filtrados
+            radius = filteredRadii.reduce((a, b) => a + b, 0) / filteredRadii.length;
+        }
+        
+        function calculateAccuracy() {
+            if (points.length < 10) return 0;
+            
+            let totalError = 0;
+            let maxDeviation = 0;
+            
+            for (const point of points) {
+                const dx = point.x - center.x;
+                const dy = point.y - center.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                const error = Math.abs(distance - radius);
+                totalError += error;
+                if (error > maxDeviation) maxDeviation = error;
+            }
+            
+            const avgError = totalError / points.length;
+            
+            // Fórmula de precisión mejorada
+            const baseAccuracy = 100 * Math.exp(-avgError / 30); // Decaimiento exponencial
+            
+            // Penalización por máxima desviación
+            const deviationPenalty = Math.min(maxDeviation / 50, 1);
+            
+            // Ajuste final con curva suave
+            const rawAccuracy = baseAccuracy * (1 - 0.3 * deviationPenalty);
+            
+            return Math.min(Math.max(rawAccuracy, 0), 100);
+        }
+        
+        function updateProgressRing(percentage) {
+            const circumference = 2 * Math.PI * 45;
+            const offset = circumference - (percentage / 100) * circumference;
+            progressCircle.style.strokeDashoffset = offset;
+            
+            // Cambiar color basado en el porcentaje
+            if (percentage > 90) {
+                progressCircle.style.stroke = '#4cc9f0';
+            } else if (percentage > 70) {
+                progressCircle.style.stroke = '#a6e22e';
+            } else if (percentage > 50) {
+                progressCircle.style.stroke = '#fd971f';
+            } else {
+                progressCircle.style.stroke = '#f92672';
+            }
+        }
+        
+        function showAIFeedback(accuracy) {
+            const feedbacks = [
+                { min: 95, text: "¡Perfecto! Eres una máquina de dibujar círculos." },
+                { min: 85, text: "Excelente trabajo. Casi perfecto." },
+                { min: 75, text: "Muy buen círculo. Con práctica mejorarás." },
+                { min: 60, text: "Buen intento. Sigue practicando." },
+                { min: 40, text: "No está mal, pero puedes hacerlo mejor." },
+                { min: 20, text: "Sigue intentándolo. Concéntrate en la forma." },
+                { min: 0, text: "Todos empezamos así. ¡Sigue practicando!" }
+            ];
+            
+            const feedback = feedbacks.find(f => accuracy >= f.min)?.text || "¡Sigue intentándolo!";
+            feedbackDiv.textContent = feedback;
+            
+            // Animación del feedback
+            feedbackDiv.style.opacity = 0;
+            feedbackDiv.style.transform = 'translateY(10px)';
+            feedbackDiv.style.transition = 'none';
+            
+            setTimeout(() => {
+                feedbackDiv.style.transition = 'opacity 0.3s, transform 0.3s';
+                feedbackDiv.style.opacity = 1;
+                feedbackDiv.style.transform = 'translateY(0)';
+            }, 10);
+        }
+        
+        function reset() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.strokeStyle = '#4cc9f0';
+            ctx.lineWidth = 4;
+            ctx.shadowBlur = 10;
+            ctx.shadowColor = 'rgba(76, 201, 240, 0.7)';
+            resultDiv.textContent = '';
+            feedbackDiv.textContent = '';
+            points = [];
+            isDrawing = false;
+            
+            // Resetear el anillo de progreso
+            progressCircle.style.strokeDashoffset = '282.743';
+            progressCircle.style.stroke = '#4cc9f0';
+        }
+    </script>
+</body>
+</html>

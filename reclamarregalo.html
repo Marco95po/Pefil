@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premio Kerim Music</title>
+    <style>
+        :root {
+            --primary: #FF6B00;  /* Naranja vibrante */
+            --primary-dark: #CC5600;
+            --dark: #121212;     /* Negro moderno */
+            --light: #F8F8F8;
+            --gray: #333333;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background-color: var(--dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: var(--light);
+        }
+        
+        .container {
+            text-align: center;
+            padding: 40px;
+            background-color: var(--gray);
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 90%;
+            border: 1px solid rgba(255, 107, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+        }
+        
+        h1 {
+            color: var(--primary);
+            margin-bottom: 24px;
+            font-size: 32px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+        
+        .premio-text {
+            font-size: 18px;
+            margin-bottom: 30px;
+            color: #DDD;
+            line-height: 1.6;
+        }
+        
+        .btn-reclamar {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            font-size: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 12px rgba(255, 107, 0, 0.3);
+            margin-top: 10px;
+        }
+        
+        .btn-reclamar:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(255, 107, 0, 0.4);
+        }
+        
+        .btn-reclamar:active {
+            transform: translateY(0);
+        }
+        
+        .lista-premios {
+            text-align: left;
+            margin: 30px 0;
+            padding-left: 0;
+            list-style-type: none;
+        }
+        
+        .lista-premios li {
+            margin-bottom: 16px;
+            padding-left: 28px;
+            position: relative;
+            font-size: 16px;
+            color: #EEE;
+        }
+        
+        .lista-premios li::before {
+            content: '•';
+            color: var(--primary);
+            font-size: 24px;
+            position: absolute;
+            left: 0;
+            top: -4px;
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 28px;
+            }
+            
+            .btn-reclamar {
+                padding: 14px 24px;
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>¡Felicidades!</h1>
+        <p class="premio-text">Has ganado un paquete exclusivo en el estudio Kerim Music que incluye:</p>
+        
+        <ul class="lista-premios">
+            <li>Beats personalizados</li>
+            <li>Grabación gratis</li>
+            <li>Masterización profesional</li>
+        </ul>
+        
+        <button class="btn-reclamar" onclick="enviarWhatsApp()">Reclamar premio</button>
+    </div>
+
+    <script>
+        function enviarWhatsApp() {
+            // Número de teléfono (asegúrate de incluir el código de país)
+            const telefono = '524621098798';
+            
+            // Mensaje predefinido con los detalles del premio
+            const mensaje = encodeURIComponent(
+                '¡Hola Kerim Music! Estoy reclamando mi premio que incluye:\n\n' +
+                '• Beats personalizados\n' +
+                '• Grabación gratis\n' +
+                '• Masterización profesional\n\n' +
+                'Por favor, indíquenme los próximos pasos. ¡Gracias!'
+            );
+            
+            // Abrir WhatsApp con el mensaje predefinido
+            window.open(`https://wa.me/${telefono}?text=${mensaje}`, '_blank');
+        }
+    </script>
+</body>
+</html>

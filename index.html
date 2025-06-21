@@ -2,763 +2,1347 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Dibuja un Círculo Perfecto 2025</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Melodía Legendaria</title>
     <style>
-        :root {
-            --primary: #FF6B00;
-            --secondary: #FF9500;
-            --accent: #FFAA00;
-            --dark: #121212;
-            --light: #F5F5F5;
-            --success: #FF8C00;
-            --glass: rgba(0, 0, 0, 0.3);
-            --particle: #FFA500;
-        }
-        
-        * {
-            box-sizing: border-box;
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #111;
+            overflow: hidden;
+            font-family: 'Arial', sans-serif;
             touch-action: manipulation;
         }
         
-        body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            text-align: center;
-            margin: 0;
-            padding: 10px;
-            background: linear-gradient(135deg, #000000, #121212);
-            color: var(--light);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start; /* Cambiado para permitir scroll */
-            overflow-x: hidden;
-            position: relative;
-        }
-        
-        .scroll-container {
-            width: 100%;
-            max-width: 100%;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px 0;
-            flex-grow: 1;
-        }
-        
-        h1 {
-            font-size: clamp(1.8rem, 5vw, 2.5rem);
-            margin-bottom: 0.5rem;
-            background: linear-gradient(to right, var(--success), var(--accent));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: 0 2px 10px rgba(255, 140, 0, 0.3);
-            line-height: 1.3;
-        }
-        
-        .container {
-            background: var(--glass);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: clamp(1rem, 3vw, 2rem);
-            box-shadow: 0 8px 32px rgba(255, 106, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            width: 95%;
-            max-width: 500px;
-            transition: all 0.5s ease;
-            position: relative;
-            z-index: 10;
-            margin: 10px 0;
-        }
-        
-        #instructions {
-            margin: clamp(0.8rem, 2vw, 1.5rem) 0;
-            font-size: clamp(0.9rem, 3vw, 1.1rem);
-            line-height: 1.6;
-            opacity: 0.9;
-            color: rgba(255, 255, 255, 0.8);
-            padding: 0 5px;
-        }
-        
-        .canvas-container {
-            position: relative;
-            width: 100%;
-            margin: 1rem auto;
-        }
-        
-        #canvas {
-            width: 100%;
-            height: auto;
-            max-width: 400px;
-            max-height: 400px;
-            aspect-ratio: 1/1;
-            border: 2px solid rgba(255, 140, 0, 0.3);
-            border-radius: 15px;
+        #gameCanvas {
             display: block;
             margin: 0 auto;
-            background-color: rgba(0, 0, 0, 0.3);
-            cursor: crosshair;
-            transition: box-shadow 0.3s;
-            touch-action: none;
+            background-color: #222;
+            border: 4px solid #FF6D00;
         }
         
-        #canvas:hover {
-            box-shadow: 0 0 30px rgba(255, 140, 0, 0.3);
+        #ui {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: #FF6D00;
+            font-size: 18px;
+            text-shadow: 2px 2px 2px #000;
         }
         
-        #result {
-            font-size: clamp(1.4rem, 4vw, 1.8rem);
-            font-weight: 600;
-            margin: clamp(0.8rem, 2vw, 1.5rem);
-            background: linear-gradient(to right, var(--success), var(--accent));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        #controls {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
         }
         
-        button {
-            padding: clamp(10px, 3vw, 12px) clamp(20px, 5vw, 28px);
-            font-size: clamp(0.9rem, 3vw, 1rem);
-            font-weight: 600;
-            background: linear-gradient(45deg, var(--primary), var(--secondary));
-            color: black;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(255, 106, 0, 0.4);
-            position: relative;
-            overflow: hidden;
-            width: auto;
-            min-width: 180px;
-            margin: 5px 0;
-        }
-        
-        button:hover, button:focus {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 106, 0, 0.6);
+        .mobile-btn {
+            width: 80px;
+            height: 80px;
+            background-color: rgba(255, 109, 0, 0.5);
+            border: 3px solid #FF6D00;
+            border-radius: 50%;
             color: white;
-            outline: none;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+            -webkit-user-select: none;
         }
         
-        button:active {
-            transform: translateY(0);
-        }
-        
-        button::after {
-            content: '';
+        #startScreen {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transform: translateX(-100%);
-            transition: transform 0.6s ease;
-        }
-        
-        button:hover::after {
-            transform: translateX(100%);
-        }
-        
-        .progress-ring {
-            position: relative;
-            width: clamp(90px, 25vw, 120px);
-            height: clamp(90px, 25vw, 120px);
-            margin: clamp(10px, 3vw, 20px) auto;
-        }
-        
-        .progress-ring__circle {
-            transform: rotate(-90deg);
-            transform-origin: 50% 50%;
-        }
-        
-        .progress-ring__circle-bg {
-            stroke: rgba(255, 255, 255, 0.1);
-            stroke-width: 6;
-            fill: none;
-        }
-        
-        .progress-ring__circle-fill {
-            stroke: var(--success);
-            stroke-width: 6;
-            stroke-linecap: round;
-            fill: none;
-            transition: stroke-dashoffset 0.5s ease;
-            filter: drop-shadow(0 0 5px rgba(255, 140, 0, 0.7));
-        }
-        
-        .ai-feedback {
-            font-size: clamp(0.85rem, 3vw, 1rem);
-            margin-top: clamp(0.5rem, 2vw, 1rem);
-            font-style: italic;
-            opacity: 0.8;
-            color: rgba(255, 255, 255, 0.8);
-            padding: 0 10px;
-        }
-        
-        /* Estilos para el mensaje de límite */
-        .limit-message {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(18, 18, 18, 0.95);
-            z-index: 100;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            color: #FF6D00;
+            z-index: 10;
+        }
+        
+        #startScreen h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            text-shadow: 3px 3px 0 #000;
+            color: #FF6D00;
+        }
+        
+        #startScreen p {
+            font-size: 18px;
+            max-width: 600px;
             text-align: center;
+            margin-bottom: 30px;
         }
         
-        .limit-message h2 {
-            font-size: clamp(1.5rem, 6vw, 2rem);
-            color: var(--success);
-            margin-bottom: 1rem;
-            text-shadow: 0 0 10px rgba(255, 140, 0, 0.5);
-        }
-        
-        .limit-message p {
-            font-size: clamp(1rem, 3.5vw, 1.2rem);
-            margin-bottom: clamp(1rem, 3vw, 2rem);
-            max-width: 500px;
-            color: rgba(255, 255, 255, 0.8);
-            padding: 0 15px;
-        }
-        
-        .timer {
-            font-size: clamp(1.8rem, 7vw, 2.5rem);
+        #startButton {
+            padding: 15px 30px;
+            background-color: #FF6D00;
+            color: black;
+            border: none;
+            border-radius: 5px;
+            font-size: 20px;
             font-weight: bold;
-            color: var(--accent);
-            margin: clamp(0.5rem, 2vw, 1rem) 0;
-            font-family: monospace;
-            text-shadow: 0 0 10px rgba(255, 170, 0, 0.5);
+            cursor: pointer;
         }
         
-        /* Partículas */
-        .particle {
+        #startButton:hover {
+            background-color: #FF8F00;
+        }
+        
+        #continueButton {
+            padding: 15px 30px;
+            background-color: #FF8F00;
+            color: black;
+            border: none;
+            border-radius: 5px;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        
+        #continueButton:hover {
+            background-color: #FFB300;
+        }
+        
+        #levelComplete {
             position: absolute;
-            background-color: var(--particle);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 1;
-            opacity: 0.7;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #FF6D00;
+            z-index: 10;
         }
         
-        /* Orientación landscape para móviles */
-        @media (max-height: 500px) and (orientation: landscape) {
-            .container {
-                max-width: 90%;
-                padding: 10px;
-                flex-direction: row;
-                flex-wrap: wrap;
-                justify-content: center;
-                align-items: center;
-            }
-            
-            h1 {
-                width: 100%;
-                margin-bottom: 5px;
-                font-size: 1.5rem;
-            }
-            
-            #instructions {
-                width: 100%;
-                margin: 5px 0;
-                font-size: 0.9rem;
-            }
-            
-            .canvas-container {
-                width: 60%;
-                max-width: 250px;
-                margin: 5px;
-            }
-            
-            .progress-ring {
-                width: 80px;
-                height: 80px;
-                margin: 5px;
-            }
-            
-            #result, #feedback {
-                margin: 5px;
-                font-size: 1rem;
-            }
-            
-            button {
-                margin: 5px;
-                padding: 8px 16px;
-                font-size: 0.9rem;
-            }
+        #levelComplete h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
         }
         
-        /* Dispositivos muy pequeños */
-        @media (max-width: 350px) {
-            h1 {
-                font-size: 1.5rem;
-            }
-            
-            #instructions {
-                font-size: 0.8rem;
-            }
-            
-            button {
-                min-width: 160px;
-                padding: 8px 16px;
-            }
+        #nextLevelButton {
+            padding: 15px 30px;
+            background-color: #FF6D00;
+            color: black;
+            border: none;
+            border-radius: 5px;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        #gameOver {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #FF6D00;
+            z-index: 10;
+        }
+        
+        #gameOver h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+        
+        #restartButton {
+            padding: 15px 30px;
+            background-color: #FF6D00;
+            color: black;
+            border: none;
+            border-radius: 5px;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        #damageText {
+            position: absolute;
+            color: red;
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: 2px 2px 2px black;
+            z-index: 5;
+            display: none;
         }
     </style>
 </head>
 <body>
-    <div class="scroll-container">
-        <div class="container" id="main-container">
-            <h1>Dibuja un Círculo Perfecto</h1>
-            <div id="instructions">
-                Usa tu dedo o el mouse para dibujar un círculo. Suelta para evaluar tu precisión.
-            </div>
-            
-            <div class="canvas-container">
-                <canvas id="canvas"></canvas>
-            </div>
-            
-            <div class="progress-ring">
-                <svg viewBox="0 0 100 100">
-                    <circle class="progress-ring__circle-bg" cx="50" cy="50" r="45" />
-                    <circle class="progress-ring__circle-fill" cx="50" cy="50" r="45" stroke-dasharray="282.743" stroke-dashoffset="282.743" />
-                </svg>
-            </div>
-            
-            <div id="result"></div>
-            <div id="feedback" class="ai-feedback"></div>
-            <button id="reset">Intentar de nuevo</button>
-        </div>
+    <canvas id="gameCanvas" width="800" height="500"></canvas>
+    
+    <div id="damageText">¡¡Mierda!!</div>
+    
+    <div id="ui">
+        Nivel: <span id="levelDisplay">1</span> | 
+        Notas: <span id="notesDisplay">0</span> | 
+        Vidas: <span id="livesDisplay">3</span>
     </div>
-
-    <div class="limit-message" id="limit-message">
-        <h2>¡Límite de intentos alcanzado!</h2>
-        <p>Has alcanzado el máximo de 5 intentos. Por favor, espera 1 hora para volver a intentarlo.</p>
-        <div class="timer" id="timer">01:00:00</div>
-        <p>Mientras tanto, podrías practicar dibujando círculos en papel. ¡La práctica hace al maestro!</p>
+    
+    <div id="controls">
+        <div class="mobile-btn" id="leftBtn">←</div>
+        <div class="mobile-btn" id="jumpBtn">↑</div>
+        <div class="mobile-btn" id="rightBtn">→</div>
+        <div class="mobile-btn" id="attackBtn">A</div>
     </div>
-
+    
+    <div id="startScreen">
+        <h1>Melodía Legendaria</h1>
+        <p>Ayuda a Ritmo a recuperar las Notas Sagradas robadas por el malvado Silencio. 
+           Supera 10 niveles musicales, sincronizando tus movimientos con el ritmo de la música. 
+           ¡Devuelve la armonía al mundo!</p>
+        <button id="startButton">Nueva Partida</button>
+        <button id="continueButton" style="display: none;">Continuar Partida</button>
+    </div>
+    
+    <div id="levelComplete">
+        <h2>¡Nivel Completado!</h2>
+        <p>Notas recolectadas: <span id="notesCollected">0</span></p>
+        <p>¡+3 vidas por completar el nivel!</p>
+        <button id="nextLevelButton">Siguiente Nivel</button>
+    </div>
+    
+    <div id="gameOver">
+        <h2>¡Game Over!</h2>
+        <p>Silencio está ganando... ¿Intentarás de nuevo?</p>
+        <button id="restartButton">Reintentar</button>
+    </div>
+    
     <script>
-        const canvas = document.getElementById('canvas');
+        // Configuración del juego
+        const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
-        const resultDiv = document.getElementById('result');
-        const feedbackDiv = document.getElementById('feedback');
-        const resetBtn = document.getElementById('reset');
-        const progressCircle = document.querySelector('.progress-ring__circle-fill');
-        const mainContainer = document.getElementById('main-container');
-        const limitMessage = document.getElementById('limit-message');
-        const timerDisplay = document.getElementById('timer');
+        const levelDisplay = document.getElementById('levelDisplay');
+        const notesDisplay = document.getElementById('notesDisplay');
+        const livesDisplay = document.getElementById('livesDisplay');
+        const startScreen = document.getElementById('startScreen');
+        const startButton = document.getElementById('startButton');
+        const continueButton = document.getElementById('continueButton');
+        const levelComplete = document.getElementById('levelComplete');
+        const nextLevelButton = document.getElementById('nextLevelButton');
+        const notesCollected = document.getElementById('notesCollected');
+        const gameOver = document.getElementById('gameOver');
+        const restartButton = document.getElementById('restartButton');
+        const damageText = document.getElementById('damageText');
         
-        let isDrawing = false;
-        let points = [];
-        let center = { x: 0, y: 0 };
-        let radius = 0;
-        let attempts = 0;
-        let cooldownTimeout;
-        let timerInterval;
-        let particles = [];
+        // Controles móviles
+        const leftBtn = document.getElementById('leftBtn');
+        const rightBtn = document.getElementById('rightBtn');
+        const jumpBtn = document.getElementById('jumpBtn');
+        const attackBtn = document.getElementById('attackBtn');
         
-        // Ajustar tamaño del canvas al cargar y al redimensionar
+        // Ajustar tamaño del canvas para móviles
         function resizeCanvas() {
-            const canvasContainer = document.querySelector('.canvas-container');
-            const size = Math.min(canvasContainer.offsetWidth, 400);
+            const maxWidth = window.innerWidth - 20;
+            const maxHeight = window.innerHeight - 200;
+            const ratio = canvas.width / canvas.height;
             
-            canvas.width = size;
-            canvas.height = size;
-            
-            // Redibujar si hay puntos (para mantener el dibujo al rotar pantalla)
-            if (points.length > 0) {
-                redrawCanvas();
+            if (maxWidth / ratio <= maxHeight) {
+                canvas.style.width = maxWidth + 'px';
+                canvas.style.height = (maxWidth / ratio) + 'px';
+            } else {
+                canvas.style.height = maxHeight + 'px';
+                canvas.style.width = (maxHeight * ratio) + 'px';
             }
+            
+            // Mostrar controles solo en móviles
+            const controls = document.getElementById('controls');
+            controls.style.display = window.innerWidth < 768 ? 'flex' : 'none';
         }
         
-        function redrawCanvas() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        // Función para mostrar texto de daño
+        function showDamageText(x, y) {
+            damageText.style.left = x + 'px';
+            damageText.style.top = y + 'px';
+            damageText.style.display = 'block';
             
-            if (points.length > 1) {
-                ctx.strokeStyle = '#FF8C00';
-                ctx.lineWidth = 4;
-                ctx.lineJoin = 'round';
-                ctx.lineCap = 'round';
-                ctx.shadowBlur = 15;
-                ctx.shadowColor = 'rgba(255, 140, 0, 0.7)';
+            // Animación
+            let opacity = 1;
+            let posY = y;
+            const anim = setInterval(() => {
+                opacity -= 0.05;
+                posY -= 2;
+                damageText.style.opacity = opacity;
+                damageText.style.top = posY + 'px';
                 
-                ctx.beginPath();
-                ctx.moveTo(points[0].x, points[0].y);
+                if (opacity <= 0) {
+                    clearInterval(anim);
+                    damageText.style.display = 'none';
+                }
+            }, 50);
+        }
+        
+        // Variables del juego
+        let gameRunning = false;
+        let currentLevel = 1;
+        let notes = 0;
+        let lives = 3;
+        let player;
+        let platforms = [];
+        let enemies = [];
+        let notesItems = [];
+        let backgroundObjects = [];
+        let beatTimer = 0;
+        let beatInterval = 1000; // 1 segundo = 60 BPM
+        let onBeat = false;
+        let lastBeatTime = 0;
+        let levelMusic = [];
+        let soundEffects = [];
+        
+        // Guardar progreso
+        function saveGame() {
+            const gameData = {
+                level: currentLevel,
+                notes: notes,
+                lives: lives
+            };
+            localStorage.setItem('melodiaLegendariaSave', JSON.stringify(gameData));
+        }
+        
+        // Cargar progreso
+        function loadGame() {
+            const savedData = localStorage.getItem('melodiaLegendariaSave');
+            if (savedData) {
+                const gameData = JSON.parse(savedData);
+                currentLevel = gameData.level;
+                notes = gameData.notes;
+                lives = gameData.lives;
+                return true;
+            }
+            return false;
+        }
+        
+        // Mostrar botón de continuar si hay partida guardada
+        if (loadGame()) {
+            continueButton.style.display = 'block';
+        }
+        
+        // Clase del jugador
+        class Player {
+            constructor() {
+                this.width = 40;
+                this.height = 60;
+                this.x = 100;
+                this.y = canvas.height - this.height - 50;
+                this.velocityX = 0;
+                this.velocityY = 0;
+                this.speed = 5;
+                this.jumpPower = 12;
+                this.isJumping = false;
+                this.facingRight = true;
+                this.attackCooldown = 0;
+                this.invincible = 0;
+                this.animationFrame = 0;
+                this.animationTimer = 0;
+                this.specialAbility = null;
+                this.beatAccuracy = 0;
+            }
+            
+            update() {
+                // Movimiento horizontal
+                this.x += this.velocityX;
                 
-                for (let i = 1; i < points.length; i++) {
-                    ctx.lineTo(points[i].x, points[i].y);
+                // Gravedad
+                this.velocityY += 0.5;
+                this.y += this.velocityY;
+                
+                // Límites del canvas
+                if (this.x < 0) this.x = 0;
+                if (this.x > canvas.width - this.width) this.x = canvas.width - this.width;
+                if (this.y > canvas.height - this.height - 50) {
+                    this.y = canvas.height - this.height - 50;
+                    this.velocityY = 0;
+                    this.isJumping = false;
                 }
                 
-                ctx.stroke();
+                // Colisión con plataformas
+                for (const platform of platforms) {
+                    if (this.y + this.height >= platform.y && 
+                        this.y < platform.y && 
+                        this.x + this.width > platform.x && 
+                        this.x < platform.x + platform.width && 
+                        this.velocityY > 0) {
+                        this.y = platform.y - this.height;
+                        this.velocityY = 0;
+                        this.isJumping = false;
+                    }
+                }
                 
-                // Si el dibujo está completo, dibujar el círculo de referencia
-                if (!isDrawing && radius > 0) {
+                // Enfriamiento de ataque
+                if (this.attackCooldown > 0) {
+                    this.attackCooldown--;
+                }
+                
+                // Invencibilidad
+                if (this.invincible > 0) {
+                    this.invincible--;
+                }
+                
+                // Animación
+                this.animationTimer++;
+                if (this.animationTimer > 10) {
+                    this.animationFrame = (this.animationFrame + 1) % 4;
+                    this.animationTimer = 0;
+                }
+                
+                // Actualizar precisión del ritmo
+                if (onBeat && (this.velocityX !== 0 || this.attackCooldown === 20)) {
+                    this.beatAccuracy = Math.min(100, this.beatAccuracy + 2);
+                } else if (!onBeat && (this.velocityX !== 0 || this.attackCooldown === 20)) {
+                    this.beatAccuracy = Math.max(0, this.beatAccuracy - 1);
+                }
+                
+                // Habilidad especial
+                if (this.specialAbility === 'doubleJump' && !this.isJumping && onBeat && this.velocityY < -5) {
+                    this.velocityY = -this.jumpPower * 0.8;
+                    this.isJumping = true;
+                    createSoundEffect('jump');
+                }
+            }
+            
+            draw() {
+                // Dibujar al jugador
+                ctx.save();
+                if (this.invincible > 0 && Math.floor(this.invincible / 5) % 2 === 0) {
+                    ctx.globalAlpha = 0.5;
+                }
+                
+                // Cuerpo (naranja)
+                ctx.fillStyle = '#FF6D00';
+                ctx.fillRect(this.x, this.y, this.width, this.height);
+                
+                // Detalles (negro)
+                ctx.fillStyle = '#000';
+                // Cabeza
+                ctx.fillRect(this.x + 10, this.y + 5, 20, 20);
+                // Brazos y piernas según animación
+                if (this.animationFrame === 0 || this.animationFrame === 2) {
+                    // Brazos abajo
+                    ctx.fillRect(this.x, this.y + 25, 10, 15);
+                    ctx.fillRect(this.x + 30, this.y + 25, 10, 15);
+                    // Piernas juntas
+                    ctx.fillRect(this.x + 10, this.y + 45, 8, 15);
+                    ctx.fillRect(this.x + 22, this.y + 45, 8, 15);
+                } else {
+                    // Brazos en movimiento
+                    ctx.fillRect(this.x - 5, this.y + 20, 10, 15);
+                    ctx.fillRect(this.x + 35, this.y + 20, 10, 15);
+                    // Piernas en movimiento
+                    if (this.animationFrame === 1) {
+                        ctx.fillRect(this.x + 5, this.y + 45, 8, 15);
+                        ctx.fillRect(this.x + 27, this.y + 45, 8, 15);
+                    } else {
+                        ctx.fillRect(this.x + 15, this.y + 45, 8, 15);
+                        ctx.fillRect(this.x + 17, this.y + 45, 8, 15);
+                    }
+                }
+                
+                // Instrumento (guitarra)
+                ctx.fillStyle = '#333';
+                ctx.fillRect(this.x + (this.facingRight ? 25 : -15), this.y + 20, 30, 10);
+                
+                // Ataque si está activo
+                if (this.attackCooldown > 20) {
+                    ctx.fillStyle = 'rgba(255, 200, 0, 0.7)';
                     ctx.beginPath();
-                    ctx.arc(center.x, center.y, radius, 0, Math.PI * 2);
-                    ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
+                    ctx.arc(
+                        this.x + (this.facingRight ? this.width + 20 : -20), 
+                        this.y + this.height / 2, 
+                        30, 
+                        0, 
+                        Math.PI * 2
+                    );
+                    ctx.fill();
+                }
+                
+                // Efecto de ritmo si está en beat
+                if (onBeat) {
+                    ctx.strokeStyle = 'rgba(255, 255, 0, 0.7)';
                     ctx.lineWidth = 3;
-                    ctx.shadowBlur = 15;
-                    ctx.shadowColor = 'rgba(255, 140, 0, 0.7)';
+                    ctx.beginPath();
+                    ctx.arc(
+                        this.x + this.width / 2, 
+                        this.y + this.height / 2, 
+                        this.width + 10, 
+                        0, 
+                        Math.PI * 2
+                    );
                     ctx.stroke();
                 }
-            }
-        }
-        
-        // Inicializar canvas
-        window.addEventListener('load', () => {
-            resizeCanvas();
-            checkAttemptLimit();
-        });
-        
-        window.addEventListener('resize', () => {
-            resizeCanvas();
-        });
-        
-        // Event listeners para mouse y pantalla táctil
-        canvas.addEventListener('mousedown', startDrawing);
-        canvas.addEventListener('mousemove', draw);
-        canvas.addEventListener('mouseup', stopDrawing);
-        canvas.addEventListener('mouseout', stopDrawing);
-        
-        canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
-        canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
-        canvas.addEventListener('touchend', stopDrawing);
-        
-        resetBtn.addEventListener('click', reset);
-        
-        function handleTouchStart(e) {
-            e.preventDefault();
-            const touch = e.touches[0];
-            const rect = canvas.getBoundingClientRect();
-            const mouseEvent = new MouseEvent('mousedown', {
-                clientX: touch.clientX,
-                clientY: touch.clientY
-            });
-            canvas.dispatchEvent(mouseEvent);
-        }
-        
-        function handleTouchMove(e) {
-            e.preventDefault();
-            const touch = e.touches[0];
-            const mouseEvent = new MouseEvent('mousemove', {
-                clientX: touch.clientX,
-                clientY: touch.clientY
-            });
-            canvas.dispatchEvent(mouseEvent);
-        }
-        
-        function startDrawing(e) {
-            isDrawing = true;
-            points = [];
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            resultDiv.textContent = '';
-            feedbackDiv.textContent = '';
-            
-            // Configuración del estilo de dibujo
-            ctx.strokeStyle = '#FF8C00';
-            ctx.lineWidth = 4;
-            ctx.lineJoin = 'round';
-            ctx.lineCap = 'round';
-            ctx.shadowBlur = 15;
-            ctx.shadowColor = 'rgba(255, 140, 0, 0.7)';
-            
-            // Registrar el primer punto
-            const rect = canvas.getBoundingClientRect();
-            const scaleX = canvas.width / rect.width;
-            const scaleY = canvas.height / rect.height;
-            
-            const x = (e.clientX - rect.left) * scaleX;
-            const y = (e.clientY - rect.top) * scaleY;
-            
-            points.push({ x, y });
-            
-            ctx.beginPath();
-            ctx.moveTo(x, y);
-        }
-        
-        function draw(e) {
-            if (!isDrawing) return;
-            
-            const rect = canvas.getBoundingClientRect();
-            const scaleX = canvas.width / rect.width;
-            const scaleY = canvas.height / rect.height;
-            
-            const x = (e.clientX - rect.left) * scaleX;
-            const y = (e.clientY - rect.top) * scaleY;
-            
-            points.push({ x, y });
-            
-            ctx.lineTo(x, y);
-            ctx.stroke();
-        }
-        
-        function stopDrawing() {
-            if (!isDrawing) return;
-            isDrawing = false;
-            
-            // Incrementar el contador de intentos solo si se dibujó algo
-            if (points.length > 5) {
-                attempts++;
-                localStorage.setItem('circleAttempts', attempts);
-                localStorage.setItem('lastAttemptTime', Date.now());
-            }
-            
-            // Calcular el círculo perfecto que mejor se ajusta
-            calculateBestFitCircle();
-            
-            // Dibujar el círculo perfecto
-            ctx.beginPath();
-            ctx.arc(center.x, center.y, radius, 0, Math.PI * 2);
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
-            ctx.lineWidth = 3;
-            ctx.shadowBlur = 15;
-            ctx.shadowColor = 'rgba(255, 140, 0, 0.7)';
-            ctx.stroke();
-            
-            // Calcular precisión
-            const accuracy = calculateAccuracy();
-            updateProgressRing(accuracy);
-            resultDiv.textContent = `${accuracy.toFixed(1)}% de precisión`;
-            
-            // Mostrar feedback de IA
-            showAIFeedback(accuracy);
-            
-            // Verificar si se alcanzó el 100% de precisión
-            if (accuracy >= 100) {
-                setTimeout(() => {
-                    window.location.href = 'reclamarregalo.html';
-                }, 1500);
-                return;
-            }
-            
-            // Verificar si se alcanzó el límite de intentos
-            if (attempts >= 5) {
-                showLimitMessage();
-            }
-        }
-        
-        function calculateBestFitCircle() {
-            // Algoritmo de ajuste de círculo por mínimos cuadrados
-            
-            // Paso 1: Calcular centro aproximado
-            let sumX = 0, sumY = 0;
-            for (const point of points) {
-                sumX += point.x;
-                sumY += point.y;
-            }
-            center.x = sumX / points.length;
-            center.y = sumY / points.length;
-            
-            // Paso 2: Calcular radio promedio con ajuste iterativo
-            let sumR = 0;
-            let radii = [];
-            
-            for (const point of points) {
-                const dx = point.x - center.x;
-                const dy = point.y - center.y;
-                const r = Math.sqrt(dx * dx + dy * dy);
-                sumR += r;
-                radii.push(r);
-            }
-            
-            // Calcular desviación estándar para ajuste fino
-            const meanRadius = sumR / points.length;
-            let squaredDifferences = 0;
-            
-            for (const r of radii) {
-                squaredDifferences += Math.pow(r - meanRadius, 2);
-            }
-            
-            const stdDev = Math.sqrt(squaredDifferences / points.length);
-            
-            // Filtrar outliers (más de 1.5 desviaciones estándar)
-            const filteredRadii = radii.filter(r => Math.abs(r - meanRadius) <= 1.5 * stdDev);
-            
-            // Calcular radio final con datos filtrados
-            radius = filteredRadii.reduce((a, b) => a + b, 0) / filteredRadii.length;
-        }
-        
-        function calculateAccuracy() {
-            if (points.length < 10) return 0;
-            
-            let totalError = 0;
-            let maxDeviation = 0;
-            
-            for (const point of points) {
-                const dx = point.x - center.x;
-                const dy = point.y - center.y;
-                const distance = Math.sqrt(dx * dx + dy * dy);
-                const error = Math.abs(distance - radius);
-                totalError += error;
-                if (error > maxDeviation) maxDeviation = error;
-            }
-            
-            const avgError = totalError / points.length;
-            
-            // Fórmula de precisión mejorada
-            const baseAccuracy = 100 * Math.exp(-avgError / (canvas.width * 0.075)); // Ajuste basado en el tamaño del canvas
-            
-            // Penalización por máxima desviación
-            const deviationPenalty = Math.min(maxDeviation / (canvas.width * 0.125), 1);
-            
-            // Ajuste final con curva suave
-            const rawAccuracy = baseAccuracy * (1 - 0.3 * deviationPenalty);
-            
-            return Math.min(Math.max(rawAccuracy, 0), 100);
-        }
-        
-        function updateProgressRing(percentage) {
-            const circumference = 2 * Math.PI * 45;
-            const offset = circumference - (percentage / 100) * circumference;
-            progressCircle.style.strokeDashoffset = offset;
-            
-            // Cambiar color basado en el porcentaje
-            if (percentage > 90) {
-                progressCircle.style.stroke = '#FF8C00';
-                progressCircle.style.filter = 'drop-shadow(0 0 10px rgba(255, 140, 0, 0.9))';
-            } else if (percentage > 70) {
-                progressCircle.style.stroke = '#FFA500';
-                progressCircle.style.filter = 'drop-shadow(0 0 8px rgba(255, 165, 0, 0.7))';
-            } else if (percentage > 50) {
-                progressCircle.style.stroke = '#FF6B00';
-                progressCircle.style.filter = 'drop-shadow(0 0 6px rgba(255, 107, 0, 0.5))';
-            } else {
-                progressCircle.style.stroke = '#FF4500';
-                progressCircle.style.filter = 'drop-shadow(0 0 4px rgba(255, 69, 0, 0.3))';
-            }
-        }
-        
-        function showAIFeedback(accuracy) {
-            const feedbacks = [
-                { min: 95, text: "¡Perfecto! Eres una máquina de dibujar círculos." },
-                { min: 85, text: "Excelente trabajo. Casi perfecto." },
-                { min: 75, text: "Muy buen círculo. Con práctica mejorarás." },
-                { min: 60, text: "Buen intento. Sigue practicando." },
-                { min: 40, text: "No está mal, pero puedes hacerlo mejor." },
-                { min: 20, text: "Sigue intentándolo. Concéntrate en la forma." },
-                { min: 0, text: "Todos empezamos así. ¡Sigue practicando!" }
-            ];
-            
-            const feedback = feedbacks.find(f => accuracy >= f.min)?.text || "¡Sigue intentándolo!";
-            feedbackDiv.textContent = feedback;
-            
-            // Animación del feedback
-            feedbackDiv.style.opacity = 0;
-            feedbackDiv.style.transform = 'translateY(10px)';
-            feedbackDiv.style.transition = 'none';
-            
-            setTimeout(() => {
-                feedbackDiv.style.transition = 'opacity 0.3s, transform 0.3s';
-                feedbackDiv.style.opacity = 1;
-                feedbackDiv.style.transform = 'translateY(0)';
-            }, 10);
-        }
-        
-        function reset() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.strokeStyle = '#FF8C00';
-            ctx.lineWidth = 4;
-            ctx.shadowBlur = 15;
-            ctx.shadowColor = 'rgba(255, 140, 0, 0.7)';
-            resultDiv.textContent = '';
-            feedbackDiv.textContent = '';
-            points = [];
-            isDrawing = false;
-            
-            // Resetear el anillo de progreso
-            progressCircle.style.strokeDashoffset = '282.743';
-            progressCircle.style.stroke = '#FF8C00';
-            progressCircle.style.filter = 'drop-shadow(0 0 5px rgba(255, 140, 0, 0.7))';
-        }
-        
-        function showLimitMessage() {
-            mainContainer.style.display = 'none';
-            limitMessage.style.display = 'flex';
-            
-            // Establecer el tiempo de espera (1 hora = 3600000 ms)
-            const waitTime = 3600000;
-            const endTime = Date.now() + waitTime;
-            
-            // Actualizar el temporizador cada segundo
-            updateTimer(endTime);
-            timerInterval = setInterval(() => updateTimer(endTime), 1000);
-            
-            // Configurar el timeout para cuando termine el tiempo de espera
-            cooldownTimeout = setTimeout(() => {
-                clearInterval(timerInterval);
-                attempts = 0;
-                localStorage.removeItem('circleAttempts');
-                localStorage.removeItem('lastAttemptTime');
-                limitMessage.style.display = 'none';
-                mainContainer.style.display = 'block';
-                reset();
-            }, waitTime);
-        }
-        
-        function updateTimer(endTime) {
-            const now = Date.now();
-            const remaining = Math.max(0, endTime - now);
-            
-            const hours = Math.floor(remaining / (1000 * 60 * 60));
-            const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((remaining % (1000 * 60)) / 1000);
-            
-            timerDisplay.textContent = 
-                `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-        }
-        
-        function checkAttemptLimit() {
-            const savedAttempts = localStorage.getItem('circleAttempts');
-            const lastAttemptTime = localStorage.getItem('lastAttemptTime');
-            
-            if (savedAttempts) {
-                attempts = parseInt(savedAttempts);
                 
-                // Verificar si ha pasado 1 hora desde el último intento
-                if (lastAttemptTime && (Date.now() - parseInt(lastAttemptTime)) < 3600000) {
-                    if (attempts >= 5) {
-                        showLimitMessage();
-                        
-                        // Calcular el tiempo restante
-                        const timePassed = Date.now() - parseInt(lastAttemptTime);
-                        const remainingTime = 3600000 - timePassed;
-                        
-                        // Configurar el timeout para el tiempo restante
-                        cooldownTimeout = setTimeout(() => {
-                            clearInterval(timerInterval);
-                            attempts = 0;
-                            localStorage.removeItem('circleAttempts');
-                            localStorage.removeItem('lastAttemptTime');
-                            limitMessage.style.display = 'none';
-                            mainContainer.style.display = 'block';
-                            reset();
-                        }, remainingTime);
-                        
-                        // Iniciar el temporizador
-                        const endTime = parseInt(lastAttemptTime) + 3600000;
-                        updateTimer(endTime);
-                        timerInterval = setInterval(() => updateTimer(endTime), 1000);
+                ctx.restore();
+            }
+            
+            jump() {
+                if (!this.isJumping) {
+                    this.velocityY = -this.jumpPower;
+                    this.isJumping = true;
+                    createSoundEffect('jump');
+                    
+                    // Bonus por saltar en el ritmo
+                    if (onBeat) {
+                        this.velocityY *= 1.2;
                     }
-                } else {
-                    // Si ha pasado más de 1 hora, resetear los intentos
-                    attempts = 0;
-                    localStorage.removeItem('circleAttempts');
-                    localStorage.removeItem('lastAttemptTime');
+                }
+            }
+            
+            attack() {
+                if (this.attackCooldown === 0) {
+                    this.attackCooldown = 30;
+                    createSoundEffect('attack');
+                    
+                    // Daño extra si atacas en el ritmo
+                    const damage = onBeat ? 2 : 1;
+                    
+                    // Verificar golpe a enemigos
+                    for (let i = 0; i < enemies.length; i++) {
+                        const enemy = enemies[i];
+                        const attackX = this.x + (this.facingRight ? this.width + 20 : -20);
+                        const attackY = this.y + this.height / 2;
+                        
+                        if (Math.abs(attackX - (enemy.x + enemy.width / 2)) < 40 && 
+                            Math.abs(attackY - (enemy.y + enemy.height / 2)) < 40) {
+                            enemy.health -= damage;
+                            
+                            if (enemy.health <= 0) {
+                                enemies.splice(i, 1);
+                                i--;
+                                createSoundEffect('enemyDefeat');
+                            }
+                        }
+                    }
                 }
             }
         }
+        
+        // Clase de plataforma
+        class Platform {
+            constructor(x, y, width, height, color = '#333', moving = false) {
+                this.x = x;
+                this.y = y;
+                this.width = width;
+                this.height = height;
+                this.color = color;
+                this.moving = moving;
+                this.direction = 1;
+                this.originalX = x;
+            }
+            
+            update() {
+                if (this.moving) {
+                    this.x += this.direction;
+                    if (this.x > this.originalX + 100 || this.x < this.originalX - 100) {
+                        this.direction *= -1;
+                    }
+                }
+            }
+            
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.fillRect(this.x, this.y, this.width, this.height);
+                
+                // Patrón de teclas de piano si es nivel 4
+                if (currentLevel === 4) {
+                    ctx.fillStyle = '#000';
+                    const keyWidth = this.width / 7;
+                    for (let i = 0; i < 7; i++) {
+                        ctx.fillRect(this.x + i * keyWidth, this.y, 2, this.height);
+                    }
+                }
+            }
+        }
+        
+        // Clase de enemigo
+        class Enemy {
+            constructor(x, y, type) {
+                this.x = x;
+                this.y = y;
+                this.width = 40;
+                this.height = 40;
+                this.type = type;
+                this.health = 3;
+                this.direction = 1;
+                this.speed = 1 + Math.random() * 1;
+                this.beatTimer = 0;
+                this.beatMove = false;
+                
+                // Configurar según tipo
+                switch (type) {
+                    case 'silence':
+                        this.color = '#000';
+                        this.width = 50;
+                        this.height = 60;
+                        this.health = 5;
+                        break;
+                    case 'punk':
+                        this.color = '#FF00FF';
+                        break;
+                    case 'scorpion':
+                        this.color = '#990000';
+                        this.width = 60;
+                        this.height = 30;
+                        break;
+                    case 'bat':
+                        this.color = '#660099';
+                        this.width = 30;
+                        this.height = 20;
+                        this.flying = true;
+                        break;
+                    default:
+                        this.color = '#FF0000';
+                }
+            }
+            
+            update() {
+                // Movimiento al ritmo
+                this.beatTimer++;
+                if (this.beatTimer >= beatInterval / 16) {
+                    this.beatTimer = 0;
+                    this.beatMove = !this.beatMove;
+                }
+                
+                if (this.beatMove) {
+                    this.x += this.direction * this.speed;
+                    
+                    // Cambiar dirección al llegar a límites
+                    if (this.x < 0 || this.x > canvas.width - this.width) {
+                        this.direction *= -1;
+                    }
+                    
+                    // Para enemigos voladores
+                    if (this.flying) {
+                        this.y += Math.sin(Date.now() / 500) * 0.5;
+                    }
+                }
+                
+                // Verificar colisión con jugador
+                if (player.invincible === 0 && 
+                    player.x + player.width > this.x && 
+                    player.x < this.x + this.width && 
+                    player.y + player.height > this.y && 
+                    player.y < this.y + this.height) {
+                    
+                    player.invincible = 60; // 1 segundo de invencibilidad
+                    lives--;
+                    livesDisplay.textContent = lives;
+                    createSoundEffect('hit');
+                    saveGame();
+                    
+                    // Mostrar texto "¡¡Mierda!!"
+                    const canvasRect = canvas.getBoundingClientRect();
+                    const x = this.x + canvasRect.left;
+                    const y = this.y + canvasRect.top;
+                    showDamageText(x, y);
+                    
+                    if (lives <= 0) {
+                        gameOver.style.display = 'flex';
+                        gameRunning = false;
+                        localStorage.removeItem('melodiaLegendariaSave');
+                    }
+                }
+            }
+            
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.fillRect(this.x, this.y, this.width, this.height);
+                
+                // Dibujar según tipo
+                switch (this.type) {
+                    case 'silence':
+                        // Ojos
+                        ctx.fillStyle = '#FFF';
+                        ctx.fillRect(this.x + 10, this.y + 15, 10, 10);
+                        ctx.fillRect(this.x + 30, this.y + 15, 10, 10);
+                        // Boca (tachada)
+                        ctx.strokeStyle = '#FFF';
+                        ctx.lineWidth = 3;
+                        ctx.beginPath();
+                        ctx.moveTo(this.x + 10, this.y + 40);
+                        ctx.lineTo(this.x + 40, this.y + 40);
+                        ctx.moveTo(this.x + 10, this.y + 40);
+                        ctx.lineTo(this.x + 40, this.y + 35);
+                        ctx.stroke();
+                        break;
+                    case 'punk':
+                        // Cresta
+                        ctx.fillRect(this.x + 5, this.y - 15, 30, 15);
+                        // Ojos
+                        ctx.fillStyle = '#000';
+                        ctx.fillRect(this.x + 10, this.y + 10, 5, 5);
+                        ctx.fillRect(this.x + 25, this.y + 10, 5, 5);
+                        break;
+                    case 'scorpion':
+                        // Cola
+                        ctx.beginPath();
+                        ctx.moveTo(this.x + 30, this.y + 5);
+                        ctx.lineTo(this.x + 50, this.y - 10);
+                        ctx.lineTo(this.x + 55, this.y);
+                        ctx.lineTo(this.x + 50, this.y + 10);
+                        ctx.closePath();
+                        ctx.fill();
+                        // Patas
+                        for (let i = 0; i < 4; i++) {
+                            ctx.beginPath();
+                            ctx.moveTo(this.x + 5 + i * 10, this.y + 5);
+                            ctx.lineTo(this.x - 5 + i * 10, this.y - 5);
+                            ctx.lineTo(this.x - 8 + i * 10, this.y - 3);
+                            ctx.closePath();
+                            ctx.fill();
+                            
+                            ctx.beginPath();
+                            ctx.moveTo(this.x + 5 + i * 10, this.y + 25);
+                            ctx.lineTo(this.x - 5 + i * 10, this.y + 35);
+                            ctx.lineTo(this.x - 8 + i * 10, this.y + 33);
+                            ctx.closePath();
+                            ctx.fill();
+                        }
+                        break;
+                    case 'bat':
+                        // Alas
+                        ctx.beginPath();
+                        ctx.moveTo(this.x + 15, this.y + 10);
+                        ctx.lineTo(this.x - 10, this.y);
+                        ctx.lineTo(this.x - 15, this.y - 5);
+                        ctx.lineTo(this.x + 15, this.y + 5);
+                        ctx.closePath();
+                        ctx.fill();
+                        
+                        ctx.beginPath();
+                        ctx.moveTo(this.x + 15, this.y + 10);
+                        ctx.lineTo(this.x + 40, this.y);
+                        ctx.lineTo(this.x + 45, this.y - 5);
+                        ctx.lineTo(this.x + 15, this.y + 5);
+                        ctx.closePath();
+                        ctx.fill();
+                        break;
+                    default:
+                        // Ojos para enemigo genérico
+                        ctx.fillStyle = '#000';
+                        ctx.fillRect(this.x + 10, this.y + 10, 5, 5);
+                        ctx.fillRect(this.x + 25, this.y + 10, 5, 5);
+                }
+            }
+        }
+        
+        // Clase de nota musical
+        class Note {
+            constructor(x, y, type = 'quarter') {
+                this.x = x;
+                this.y = y;
+                this.width = 20;
+                this.height = 20;
+                this.type = type;
+                this.collected = false;
+                this.floatTimer = 0;
+            }
+            
+            update() {
+                this.floatTimer++;
+                this.y += Math.sin(this.floatTimer / 20) * 0.5;
+                
+                // Verificar colisión con jugador
+                if (!this.collected && 
+                    player.x + player.width > this.x && 
+                    player.x < this.x + this.width && 
+                    player.y + player.height > this.y && 
+                    player.y < this.y + this.height) {
+                    
+                    this.collected = true;
+                    notes++;
+                    notesDisplay.textContent = notes;
+                    createSoundEffect('note');
+                    saveGame();
+                }
+            }
+            
+            draw() {
+                if (!this.collected) {
+                    ctx.save();
+                    ctx.fillStyle = '#FFD700';
+                    
+                    // Dibujar según tipo de nota
+                    if (this.type === 'quarter') {
+                        // Nota negra
+                        ctx.beginPath();
+                        ctx.ellipse(this.x + 10, this.y + 5, 5, 3, 0, 0, Math.PI * 2);
+                        ctx.fill();
+                        ctx.fillRect(this.x + 13, this.y + 5, 3, 15);
+                    } else if (this.type === 'eighth') {
+                        // Corchea
+                        ctx.beginPath();
+                        ctx.ellipse(this.x + 10, this.y + 5, 5, 3, 0, 0, Math.PI * 2);
+                        ctx.fill();
+                        ctx.fillRect(this.x + 13, this.y + 5, 3, 15);
+                        // Pluma
+                        ctx.beginPath();
+                        ctx.moveTo(this.x + 16, this.y + 20);
+                        ctx.lineTo(this.x + 20, this.y + 15);
+                        ctx.lineTo(this.x + 25, this.y + 20);
+                        ctx.closePath();
+                        ctx.fill();
+                    } else {
+                        // Redonda
+                        ctx.beginPath();
+                        ctx.ellipse(this.x + 10, this.y + 10, 8, 5, 0, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                    
+                    // Brillo
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+                    ctx.beginPath();
+                    ctx.ellipse(this.x + 8, this.y + 3, 2, 1, 0, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    ctx.restore();
+                }
+            }
+        }
+        
+        // Clase de objeto de fondo
+        class BackgroundObject {
+            constructor(x, y, width, height, type) {
+                this.x = x;
+                this.y = y;
+                this.width = width;
+                this.height = height;
+                this.type = type;
+                this.speed = 0.5;
+            }
+            
+            update() {
+                this.x -= this.speed;
+                if (this.x < -this.width) {
+                    this.x = canvas.width;
+                }
+            }
+            
+            draw() {
+                ctx.save();
+                
+                switch (this.type) {
+                    case 'tree':
+                        // Tronco
+                        ctx.fillStyle = '#663300';
+                        ctx.fillRect(this.x + this.width / 2 - 5, this.y + 20, 10, this.height - 20);
+                        // Copa
+                        ctx.fillStyle = '#006600';
+                        ctx.beginPath();
+                        ctx.arc(this.x + this.width / 2, this.y, 20, 0, Math.PI * 2);
+                        ctx.fill();
+                        break;
+                    case 'cloud':
+                        ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+                        ctx.beginPath();
+                        ctx.ellipse(this.x + 20, this.y + 10, 25, 15, 0, 0, Math.PI * 2);
+                        ctx.ellipse(this.x + 40, this.y + 15, 20, 10, 0, 0, Math.PI * 2);
+                        ctx.ellipse(this.x + 60, this.y + 10, 25, 15, 0, 0, Math.PI * 2);
+                        ctx.fill();
+                        break;
+                    case 'amplifier':
+                        ctx.fillStyle = '#333';
+                        ctx.fillRect(this.x, this.y, this.width, this.height);
+                        // Parlante
+                        ctx.fillStyle = '#666';
+                        ctx.beginPath();
+                        ctx.ellipse(this.x + this.width / 2, this.y + this.height / 2, 
+                                   this.width / 2 - 5, this.height / 2 - 5, 0, 0, Math.PI * 2);
+                        ctx.fill();
+                        // Botones
+                        ctx.fillStyle = '#FF6D00';
+                        for (let i = 0; i < 3; i++) {
+                            ctx.beginPath();
+                            ctx.arc(this.x + 10 + i * 15, this.y + 10, 3, 0, Math.PI * 2);
+                            ctx.fill();
+                        }
+                        break;
+                    case 'building':
+                        ctx.fillStyle = '#333';
+                        ctx.fillRect(this.x, this.y, this.width, this.height);
+                        // Ventanas
+                        ctx.fillStyle = '#FF6D00';
+                        const windowSize = 8;
+                        const gap = 10;
+                        for (let row = 0; row < 3; row++) {
+                            for (let col = 0; col < 3; col++) {
+                                ctx.fillRect(
+                                    this.x + gap + col * (windowSize + gap), 
+                                    this.y + gap + row * (windowSize + gap), 
+                                    windowSize, 
+                                    windowSize
+                                );
+                            }
+                        }
+                        break;
+                }
+                
+                ctx.restore();
+            }
+        }
+        
+        // Crear efectos de sonido simples con Web Audio API
+        function createSoundEffect(type) {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                
+                let frequency = 440;
+                let duration = 0.1;
+                
+                switch (type) {
+                    case 'jump':
+                        frequency = 523.25; // Do
+                        break;
+                    case 'attack':
+                        frequency = 659.25; // Mi
+                        break;
+                    case 'note':
+                        frequency = 783.99; // Sol
+                        duration = 0.3;
+                        break;
+                    case 'hit':
+                        frequency = 220;
+                        duration = 0.5;
+                        break;
+                    case 'enemyDefeat':
+                        frequency = 880;
+                        duration = 0.2;
+                        break;
+                }
+                
+                oscillator.type = 'square';
+                oscillator.frequency.setValueAtTime(frequency, audioCtx.currentTime);
+                gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+                
+                oscillator.start();
+                oscillator.stop(audioCtx.currentTime + duration);
+            } catch (e) {
+                console.log('Error de audio:', e);
+            }
+        }
+        
+        // Inicializar nivel
+        function initLevel(level) {
+            player = new Player();
+            platforms = [];
+            enemies = [];
+            notesItems = [];
+            backgroundObjects = [];
+            beatInterval = 1000 - (level * 50); // Aumenta el ritmo cada nivel
+            lastBeatTime = 0;
+            
+            // Configurar según nivel
+            switch (level) {
+                case 1: // Bosque del Ritmo Básico
+                    // Plataformas
+                    platforms.push(new Platform(0, canvas.height - 50, canvas.width, 50, '#006600'));
+                    platforms.push(new Platform(200, 350, 100, 20, '#009900'));
+                    platforms.push(new Platform(400, 250, 100, 20, '#009900'));
+                    platforms.push(new Platform(600, 350, 100, 20, '#009900'));
+                    
+                    // Enemigos
+                    enemies.push(new Enemy(300, canvas.height - 90, 'silence'));
+                    enemies.push(new Enemy(500, 210, 'silence'));
+                    
+                    // Notas
+                    notesItems.push(new Note(250, 310));
+                    notesItems.push(new Note(450, 210));
+                    notesItems.push(new Note(650, 310));
+                    notesItems.push(new Note(700, 100, 'eighth'));
+                    
+                    // Fondo
+                    for (let i = 0; i < 5; i++) {
+                        backgroundObjects.push(new BackgroundObject(
+                            Math.random() * canvas.width * 2, 
+                            canvas.height - 150, 
+                            40, 
+                            100, 
+                            'tree'
+                        ));
+                    }
+                    for (let i = 0; i < 3; i++) {
+                        backgroundObjects.push(new BackgroundObject(
+                            Math.random() * canvas.width * 2, 
+                            Math.random() * 100 + 50, 
+                            100, 
+                            40, 
+                            'cloud'
+                        ));
+                    }
+                    
+                    player.specialAbility = 'doubleJump';
+                    break;
+                    
+                case 2: // Colinas del Rock
+                    // Plataformas
+                    platforms.push(new Platform(0, canvas.height - 50, canvas.width, 50, '#333'));
+                    platforms.push(new Platform(150, 350, 80, 20, '#666', true));
+                    platforms.push(new Platform(350, 300, 80, 20, '#666', true));
+                    platforms.push(new Platform(550, 250, 80, 20, '#666', true));
+                    platforms.push(new Platform(700, 350, 80, 20, '#666', true));
+                    
+                    // Enemigos
+                    enemies.push(new Enemy(200, canvas.height - 90, 'punk'));
+                    enemies.push(new Enemy(400, 260, 'punk'));
+                    enemies.push(new Enemy(600, 210, 'punk'));
+                    
+                    // Notas
+                    notesItems.push(new Note(180, 310));
+                    notesItems.push(new Note(380, 260));
+                    notesItems.push(new Note(580, 210));
+                    notesItems.push(new Note(720, 310));
+                    notesItems.push(new Note(750, 150, 'eighth'));
+                    
+                    // Fondo (amplificadores)
+                    for (let i = 0; i < 4; i++) {
+                        backgroundObjects.push(new BackgroundObject(
+                            Math.random() * canvas.width * 2, 
+                            canvas.height - 120, 
+                            60, 
+                            80, 
+                            'amplifier'
+                        ));
+                    }
+                    
+                    player.specialAbility = 'soundWave';
+                    break;
+                    
+                case 3: // Desierto del Beat
+                    // Plataformas móviles
+                    platforms.push(new Platform(0, canvas.height - 50, canvas.width, 50, '#CC9900'));
+                    platforms.push(new Platform(100, 400, 80, 20, '#FFCC00', true));
+                    platforms.push(new Platform(300, 350, 80, 20, '#FFCC00', true));
+                    platforms.push(new Platform(500, 300, 80, 20, '#FFCC00', true));
+                    platforms.push(new Platform(700, 250, 80, 20, '#FFCC00', true));
+                    
+                    // Enemigos
+                    enemies.push(new Enemy(150, canvas.height - 90, 'scorpion'));
+                    enemies.push(new Enemy(350, 310, 'scorpion'));
+                    enemies.push(new Enemy(550, 260, 'scorpion'));
+                    
+                    // Notas
+                    notesItems.push(new Note(130, 360));
+                    notesItems.push(new Note(330, 310));
+                    notesItems.push(new Note(530, 260));
+                    notesItems.push(new Note(730, 210));
+                    notesItems.push(new Note(400, 150, 'eighth'));
+                    
+                    player.specialAbility = 'echoShield';
+                    break;
+                    
+                case 4: // Cuevas del Piano Fantasma
+                    // Plataformas (teclas de piano)
+                    platforms.push(new Platform(0, canvas.height - 50, canvas.width, 50, '#000'));
+                    for (let i = 0; i < 7; i++) {
+                        platforms.push(new Platform(
+                            100 + i * 80, 
+                            350 - (i % 2) * 50, 
+                            60, 
+                            20, 
+                            i % 2 === 0 ? '#FFF' : '#000'
+                        ));
+                    }
+                    
+                    // Enemigos (murciélagos)
+                    enemies.push(new Enemy(200, 200, 'bat'));
+                    enemies.push(new Enemy(400, 250, 'bat'));
+                    enemies.push(new Enemy(600, 150, 'bat'));
+                    
+                    // Notas
+                    notesItems.push(new Note(130, 300));
+                    notesItems.push(new Note(290, 250));
+                    notesItems.push(new Note(450, 300));
+                    notesItems.push(new Note(610, 200));
+                    notesItems.push(new Note(700, 100, 'eighth'));
+                    
+                    player.specialAbility = 'keyTeleport';
+                    break;
+                    
+                // Puedes agregar más niveles aquí...
+                
+                default:
+                    // Nivel genérico si no hay configuración específica
+                    platforms.push(new Platform(0, canvas.height - 50, canvas.width, 50, '#333'));
+                    for (let i = 0; i < 5; i++) {
+                        platforms.push(new Platform(
+                            100 + i * 150, 
+                            350 - (i % 2) * 50, 
+                            80, 
+                            20, 
+                            '#666'
+                        ));
+                        
+                        enemies.push(new Enemy(
+                            130 + i * 150, 
+                            310 - (i % 2) * 50, 
+                            'silence'
+                        ));
+                        
+                        notesItems.push(new Note(
+                            150 + i * 150, 
+                            260 - (i % 2) * 50
+                        ));
+                    }
+                    
+                    // Nota especial al final
+                    notesItems.push(new Note(700, 100, 'eighth'));
+            }
+            
+            // Actualizar UI
+            levelDisplay.textContent = level;
+            notesDisplay.textContent = notes;
+            livesDisplay.textContent = lives;
+        }
+        
+        // Bucle principal del juego
+        function gameLoop() {
+            if (!gameRunning) return;
+            
+            // Actualizar ritmo
+            const currentTime = Date.now();
+            if (currentTime - lastBeatTime > beatInterval) {
+                lastBeatTime = currentTime;
+                onBeat = true;
+                createSoundEffect('note'); // Sonido de metrónomo
+                
+                // Efecto visual de ritmo
+                ctx.fillStyle = 'rgba(255, 109, 0, 0.2)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                setTimeout(() => {
+                    onBeat = false;
+                }, beatInterval / 4);
+            }
+            
+            // Limpiar canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Dibujar fondo según nivel
+            switch (currentLevel) {
+                case 1: // Bosque
+                    ctx.fillStyle = '#003300';
+                    break;
+                case 2: // Rock
+                    ctx.fillStyle = '#330000';
+                    break;
+                case 3: // Desierto
+                    ctx.fillStyle = '#996600';
+                    break;
+                case 4: // Piano
+                    ctx.fillStyle = '#000033';
+                    break;
+                default:
+                    ctx.fillStyle = '#111';
+            }
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Actualizar y dibujar objetos de fondo
+            for (const bgObj of backgroundObjects) {
+                bgObj.update();
+                bgObj.draw();
+            }
+            
+            // Actualizar y dibujar plataformas
+            for (const platform of platforms) {
+                platform.update();
+                platform.draw();
+            }
+            
+            // Actualizar y dibujar enemigos
+            for (const enemy of enemies) {
+                enemy.update();
+                enemy.draw();
+            }
+            
+            // Actualizar y dibujar notas
+            let allNotesCollected = true;
+            for (const note of notesItems) {
+                note.update();
+                note.draw();
+                if (!note.collected) allNotesCollected = false;
+            }
+            
+            // Actualizar y dibujar jugador
+            player.update();
+            player.draw();
+            
+            // Verificar si se completó el nivel
+            if (allNotesCollected) {
+                // Sumar 3 vidas por completar el nivel
+                lives += 3;
+                saveGame();
+                
+                notesCollected.textContent = notes;
+                levelComplete.style.display = 'flex';
+                gameRunning = false;
+            }
+            
+            // Solicitar siguiente frame
+            requestAnimationFrame(gameLoop);
+        }
+        
+        // Event listeners para controles
+        document.addEventListener('keydown', (e) => {
+            if (!gameRunning) return;
+            
+            switch (e.key) {
+                case 'ArrowLeft':
+                case 'a':
+                    player.velocityX = -player.speed;
+                    player.facingRight = false;
+                    break;
+                case 'ArrowRight':
+                case 'd':
+                    player.velocityX = player.speed;
+                    player.facingRight = true;
+                    break;
+                case 'ArrowUp':
+                case 'w':
+                case ' ':
+                    player.jump();
+                    break;
+                case 'j':
+                case 'f':
+                    player.attack();
+                    break;
+            }
+        });
+        
+        document.addEventListener('keyup', (e) => {
+            if (!gameRunning) return;
+            
+            switch (e.key) {
+                case 'ArrowLeft':
+                case 'a':
+                case 'ArrowRight':
+                case 'd':
+                    if ((e.key === 'ArrowLeft' || e.key === 'a') && player.velocityX < 0) {
+                        player.velocityX = 0;
+                    } else if ((e.key === 'ArrowRight' || e.key === 'd') && player.velocityX > 0) {
+                        player.velocityX = 0;
+                    }
+                    break;
+            }
+        });
+        
+        // Controles táctiles para móviles
+        leftBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            player.velocityX = -player.speed;
+            player.facingRight = false;
+        });
+        
+        leftBtn.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            if (player.velocityX < 0) player.velocityX = 0;
+        });
+        
+        rightBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            player.velocityX = player.speed;
+            player.facingRight = true;
+        });
+        
+        rightBtn.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            if (player.velocityX > 0) player.velocityX = 0;
+        });
+        
+        jumpBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            player.jump();
+        });
+        
+        attackBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            player.attack();
+        });
+        
+        // Botones de UI
+        startButton.addEventListener('click', () => {
+            startScreen.style.display = 'none';
+            currentLevel = 1;
+            notes = 0;
+            lives = 3;
+            initLevel(currentLevel);
+            gameRunning = true;
+            gameLoop();
+            saveGame();
+        });
+        
+        continueButton.addEventListener('click', () => {
+            startScreen.style.display = 'none';
+            initLevel(currentLevel);
+            gameRunning = true;
+            gameLoop();
+        });
+        
+        nextLevelButton.addEventListener('click', () => {
+            levelComplete.style.display = 'none';
+            currentLevel++;
+            if (currentLevel > 10) {
+                // Juego completado
+                alert('¡Felicidades! Has completado Melodía Legendaria y devuelto la música al mundo.');
+                currentLevel = 1;
+                notes = 0;
+                lives = 3;
+                localStorage.removeItem('melodiaLegendariaSave');
+                startScreen.style.display = 'flex';
+                continueButton.style.display = 'none';
+            } else {
+                initLevel(currentLevel);
+                gameRunning = true;
+                gameLoop();
+                saveGame();
+            }
+        });
+        
+        restartButton.addEventListener('click', () => {
+            gameOver.style.display = 'none';
+            currentLevel = 1;
+            notes = 0;
+            lives = 3;
+            initLevel(currentLevel);
+            gameRunning = true;
+            gameLoop();
+            saveGame();
+        });
+        
+        // Inicializar pantalla de inicio
+        initLevel(1); // Solo para mostrar algo en el canvas
+        
+        // Guardar el juego cuando se cierre la pestaña
+        window.addEventListener('beforeunload', () => {
+            if (gameRunning) {
+                saveGame();
+            }
+        });
     </script>
 </body>
 </html>

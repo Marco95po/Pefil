@@ -1316,14 +1316,9 @@
             levelComplete.style.display = 'none';
             currentLevel++;
             if (currentLevel > 10) {
-                // Juego completado
-                alert('¡Felicidades! Has completado Melodía Legendaria y devuelto la música al mundo.');
-                currentLevel = 1;
-                notes = 0;
-                lives = 3;
-                localStorage.removeItem('melodiaLegendariaSave');
-                startScreen.style.display = 'flex';
-                continueButton.style.display = 'none';
+                // Redirigir a la página de reclamar regalo
+                window.location.href = 'reclamarregalo.html';
+                return;
             } else {
                 initLevel(currentLevel);
                 gameRunning = true;

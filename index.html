@@ -2,23 +2,41 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Melodía Legendaria</title>
     <style>
+        * {
+            box-sizing: border-box;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
         body {
             margin: 0;
             padding: 0;
             background-color: #111;
             overflow: hidden;
             font-family: 'Arial', sans-serif;
-            touch-action: manipulation;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            touch-action: none;
+        }
+        
+        #gameContainer {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
         }
         
         #gameCanvas {
             display: block;
-            margin: 0 auto;
             background-color: #222;
             border: 4px solid #FF6D00;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
         }
         
         #ui {
@@ -28,6 +46,8 @@
             color: #FF6D00;
             font-size: 18px;
             text-shadow: 2px 2px 2px #000;
+            z-index: 5;
+            pointer-events: none;
         }
         
         #controls {
@@ -36,12 +56,13 @@
             width: 100%;
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 15px;
+            z-index: 5;
         }
         
         .mobile-btn {
-            width: 80px;
-            height: 80px;
+            width: 70px;
+            height: 70px;
             background-color: rgba(255, 109, 0, 0.5);
             border: 3px solid #FF6D00;
             border-radius: 50%;
@@ -52,9 +73,15 @@
             justify-content: center;
             user-select: none;
             -webkit-user-select: none;
+            touch-action: manipulation;
         }
         
-        #startScreen {
+        .mobile-btn:active {
+            background-color: rgba(255, 109, 0, 0.8);
+            transform: scale(0.95);
+        }
+        
+        #startScreen, #levelComplete, #gameOver {
             position: absolute;
             top: 0;
             left: 0;
@@ -67,115 +94,40 @@
             justify-content: center;
             color: #FF6D00;
             z-index: 10;
+            padding: 20px;
+            text-align: center;
         }
         
         #startScreen h1 {
-            font-size: 48px;
+            font-size: 2.5rem;
             margin-bottom: 20px;
             text-shadow: 3px 3px 0 #000;
             color: #FF6D00;
         }
         
         #startScreen p {
-            font-size: 18px;
+            font-size: 1rem;
             max-width: 600px;
-            text-align: center;
             margin-bottom: 30px;
         }
         
-        #startButton {
-            padding: 15px 30px;
+        .game-button {
+            padding: 12px 25px;
             background-color: #FF6D00;
             color: black;
             border: none;
             border-radius: 5px;
-            font-size: 20px;
+            font-size: 1.2rem;
             font-weight: bold;
             cursor: pointer;
+            margin: 5px;
+            min-width: 200px;
         }
         
-        #startButton:hover {
+        .game-button:hover {
             background-color: #FF8F00;
         }
         
-        #continueButton {
-            padding: 15px 30px;
-            background-color: #FF8F00;
-            color: black;
-            border: none;
-            border-radius: 5px;
-            font-size: 20px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-        
-        #continueButton:hover {
-            background-color: #FFB300;
-        }
-        
-        #levelComplete {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: #FF6D00;
-            z-index: 10;
-        }
-        
-        #levelComplete h2 {
-            font-size: 36px;
-            margin-bottom: 20px;
-        }
-        
-        #nextLevelButton {
-            padding: 15px 30px;
-            background-color: #FF6D00;
-            color: black;
-            border: none;
-            border-radius: 5px;
-            font-size: 20px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        
-        #gameOver {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: #FF6D00;
-            z-index: 10;
-        }
-        
-        #gameOver h2 {
-            font-size: 36px;
-            margin-bottom: 20px;
-        }
-        
-        #restartButton {
-            padding: 15px 30px;
-            background-color: #FF6D00;
-            color: black;
-            border: none;
-            border-radius: 5px;
-            font-size: 20px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
         #damageText {
             position: absolute;
             color: red;
@@ -184,47 +136,77 @@
             text-shadow: 2px 2px 2px black;
             z-index: 5;
             display: none;
+            pointer-events: none;
+        }
+        
+        /* Ajustes para pantallas pequeñas */
+        @media (max-width: 480px) {
+            .mobile-btn {
+                width: 60px;
+                height: 60px;
+                font-size: 20px;
+            }
+            
+            #startScreen h1 {
+                font-size: 2rem;
+            }
+            
+            #startScreen p {
+                font-size: 0.9rem;
+            }
+            
+            .game-button {
+                font-size: 1rem;
+                padding: 10px 20px;
+                min-width: 160px;
+            }
+            
+            #ui {
+                font-size: 16px;
+            }
         }
     </style>
 </head>
 <body>
-    <canvas id="gameCanvas" width="800" height="500"></canvas>
-    
-    <div id="damageText">¡¡Mierda!!</div>
-    
-    <div id="ui">
-        Nivel: <span id="levelDisplay">1</span> | 
-        Notas: <span id="notesDisplay">0</span> | 
-        Vidas: <span id="livesDisplay">3</span>
-    </div>
-    
-    <div id="controls">
-        <div class="mobile-btn" id="leftBtn">←</div>
-        <div class="mobile-btn" id="jumpBtn">↑</div>
-        <div class="mobile-btn" id="rightBtn">→</div>
-        <div class="mobile-btn" id="attackBtn">A</div>
-    </div>
-    
-    <div id="startScreen">
-        <h1>Melodía Legendaria</h1>
-        <p>Ayuda a Ritmo a recuperar las Notas Sagradas robadas por el malvado Silencio. 
-           Supera 10 niveles musicales, sincronizando tus movimientos con el ritmo de la música. 
-           ¡Devuelve la armonía al mundo!</p>
-        <button id="startButton">Nueva Partida</button>
-        <button id="continueButton" style="display: none;">Continuar Partida</button>
-    </div>
-    
-    <div id="levelComplete">
-        <h2>¡Nivel Completado!</h2>
-        <p>Notas recolectadas: <span id="notesCollected">0</span></p>
-        <p>¡+3 vidas por completar el nivel!</p>
-        <button id="nextLevelButton">Siguiente Nivel</button>
-    </div>
-    
-    <div id="gameOver">
-        <h2>¡Game Over!</h2>
-        <p>Silencio está ganando... ¿Intentarás de nuevo?</p>
-        <button id="restartButton">Reintentar</button>
+    <div id="gameContainer">
+        <canvas id="gameCanvas"></canvas>
+        
+        <div id="damageText">¡¡Mierda!!</div>
+        
+        <div id="ui">
+            Nivel: <span id="levelDisplay">1</span> | 
+            Notas: <span id="notesDisplay">0</span> | 
+            Vidas: <span id="livesDisplay">3</span>
+        </div>
+        
+        <div id="controls">
+            <div class="mobile-btn" id="leftBtn">←</div>
+            <div class="mobile-btn" id="jumpBtn">↑</div>
+            <div class="mobile-btn" id="rightBtn">→</div>
+            <div class="mobile-btn" id="attackBtn">A</div>
+        </div>
+        
+        <div id="startScreen">
+            <h1>Melodía Legendaria</h1>
+            <p>Ayuda a Ritmo a recuperar las Notas Sagradas robadas por el malvado Silencio. 
+               Supera 10 niveles musicales, sincronizando tus movimientos con el ritmo de la música. 
+               ¡Devuelve la armonía al mundo!</p>
+            <button id="startButton" class="game-button">Nueva Partida</button>
+            <button id="continueButton" class="game-button" style="display: none;">Continuar Partida</button>
+        </div>
+        
+        <div id="levelComplete" style="display: none;">
+            <h2>¡Nivel Completado!</h2>
+            <p>Notas recolectadas: <span id="notesCollected">0</span></p>
+            <p>¡+3 vidas por completar el nivel!</p>
+            <button id="nextLevelButton" class="game-button">Siguiente Nivel</button>
+        </div>
+        
+        <div id="gameOver" style="display: none;">
+            <h2>¡Game Over!</h2>
+            <p>Silencio está ganando... ¿Intentarás de nuevo?</p>
+            <button id="restartButton" class="game-button">Reintentar</button>
+        </div>
     </div>
     
     <script>
@@ -250,42 +232,60 @@
         const jumpBtn = document.getElementById('jumpBtn');
         const attackBtn = document.getElementById('attackBtn');
         
+        // Variables de tamaño del juego
+        const GAME_WIDTH = 800;
+        const GAME_HEIGHT = 500;
+        let scaleRatio = 1;
+        
         // Ajustar tamaño del canvas para móviles
         function resizeCanvas() {
-            const maxWidth = window.innerWidth - 20;
-            const maxHeight = window.innerHeight - 200;
-            const ratio = canvas.width / canvas.height;
+            const windowWidth = window.innerWidth;
+            const windowHeight = window.innerHeight;
             
-            if (maxWidth / ratio <= maxHeight) {
-                canvas.style.width = maxWidth + 'px';
-                canvas.style.height = (maxWidth / ratio) + 'px';
+            // Calcular la relación de aspecto
+            const windowRatio = windowWidth / windowHeight;
+            const gameRatio = GAME_WIDTH / GAME_HEIGHT;
+            
+            if (windowRatio < gameRatio) {
+                scaleRatio = windowWidth / GAME_WIDTH;
             } else {
-                canvas.style.height = maxHeight + 'px';
-                canvas.style.width = (maxHeight * ratio) + 'px';
+                scaleRatio = windowHeight / GAME_HEIGHT;
             }
             
-            // Mostrar controles solo en móviles
-            const controls = document.getElementById('controls');
-            controls.style.display = window.innerWidth < 768 ? 'flex' : 'none';
+            canvas.width = GAME_WIDTH;
+            canvas.height = GAME_HEIGHT;
+            
+            // Escalar el canvas
+            canvas.style.width = `${GAME_WIDTH * scaleRatio}px`;
+            canvas.style.height = `${GAME_HEIGHT * scaleRatio}px`;
+            
+            // Ajustar controles para móviles
+            const isMobile = window.innerWidth <= 768;
+            document.getElementById('controls').style.display = isMobile ? 'flex' : 'none';
         }
         
         window.addEventListener('resize', resizeCanvas);
+        window.addEventListener('orientationchange', resizeCanvas);
         resizeCanvas();
 
         // Función para mostrar texto de daño
         function showDamageText(x, y) {
-            damageText.style.left = x + 'px';
-            damageText.style.top = y + 'px';
+            const canvasRect = canvas.getBoundingClientRect();
+            const xPos = (x * scaleRatio) + canvasRect.left;
+            const yPos = (y * scaleRatio) + canvasRect.top;
+            
+            damageText.style.left = `${xPos}px`;
+            damageText.style.top = `${yPos}px`;
             damageText.style.display = 'block';
             
             // Animación
             let opacity = 1;
-            let posY = y;
+            let posY = yPos;
             const anim = setInterval(() => {
                 opacity -= 0.05;
                 posY -= 2;
                 damageText.style.opacity = opacity;
-                damageText.style.top = posY + 'px';
+                damageText.style.top = `${posY}px`;
                 
                 if (opacity <= 0) {
                     clearInterval(anim);
@@ -308,8 +308,6 @@
         let beatInterval = 1000; // 1 segundo = 60 BPM
         let onBeat = false;
         let lastBeatTime = 0;
-        let levelMusic = [];
-        let soundEffects = [];
         
         // Guardar progreso
         function saveGame() {
@@ -345,7 +343,7 @@
                 this.width = 40;
                 this.height = 60;
                 this.x = 100;
-                this.y = canvas.height - this.height - 50;
+                this.y = GAME_HEIGHT - this.height - 50;
                 this.velocityX = 0;
                 this.velocityY = 0;
                 this.speed = 5;
@@ -370,9 +368,9 @@
                 
                 // Límites del canvas
                 if (this.x < 0) this.x = 0;
-                if (this.x > canvas.width - this.width) this.x = canvas.width - this.width;
-                if (this.y > canvas.height - this.height - 50) {
-                    this.y = canvas.height - this.height - 50;
+                if (this.x > GAME_WIDTH - this.width) this.x = GAME_WIDTH - this.width;
+                if (this.y > GAME_HEIGHT - this.height - 50) {
+                    this.y = GAME_HEIGHT - this.height - 50;
                     this.velocityY = 0;
                     this.isJumping = false;
                 }
@@ -627,7 +625,7 @@
                     this.x += this.direction * this.speed;
                     
                     // Cambiar dirección al llegar a límites
-                    if (this.x < 0 || this.x > canvas.width - this.width) {
+                    if (this.x < 0 || this.x > GAME_WIDTH - this.width) {
                         this.direction *= -1;
                     }
                     
@@ -651,10 +649,7 @@
                     saveGame();
                     
                     // Mostrar texto "¡¡Mierda!!"
-                    const canvasRect = canvas.getBoundingClientRect();
-                    const x = this.x + canvasRect.left;
-                    const y = this.y + canvasRect.top;
-                    showDamageText(x, y);
+                    showDamageText(this.x, this.y);
                     
                     if (lives <= 0) {
                         gameOver.style.display = 'flex';
@@ -834,7 +829,7 @@
             update() {
                 this.x -= this.speed;
                 if (this.x < -this.width) {
-                    this.x = canvas.width;
+                    this.x = GAME_WIDTH;
                 }
             }
             
@@ -961,13 +956,13 @@
             switch (level) {
                 case 1: // Bosque del Ritmo Básico
                     // Plataformas
-                    platforms.push(new Platform(0, canvas.height - 50, canvas.width, 50, '#006600'));
+                    platforms.push(new Platform(0, GAME_HEIGHT - 50, GAME_WIDTH, 50, '#006600'));
                     platforms.push(new Platform(200, 350, 100, 20, '#009900'));
                     platforms.push(new Platform(400, 250, 100, 20, '#009900'));
                     platforms.push(new Platform(600, 350, 100, 20, '#009900'));
                     
                     // Enemigos
-                    enemies.push(new Enemy(300, canvas.height - 90, 'silence'));
+                    enemies.push(new Enemy(300, GAME_HEIGHT - 90, 'silence'));
                     enemies.push(new Enemy(500, 210, 'silence'));
                     
                     // Notas
@@ -979,8 +974,8 @@
                     // Fondo
                     for (let i = 0; i < 5; i++) {
                         backgroundObjects.push(new BackgroundObject(
-                            Math.random() * canvas.width * 2, 
-                            canvas.height - 150, 
+                            Math.random() * GAME_WIDTH * 2, 
+                            GAME_HEIGHT - 150, 
                             40, 
                             100, 
                             'tree'
@@ -988,7 +983,7 @@
                     }
                     for (let i = 0; i < 3; i++) {
                         backgroundObjects.push(new BackgroundObject(
-                            Math.random() * canvas.width * 2, 
+                            Math.random() * GAME_WIDTH * 2, 
                             Math.random() * 100 + 50, 
                             100, 
                             40, 
@@ -1001,14 +996,14 @@
                     
                 case 2: // Colinas del Rock
                     // Plataformas
-                    platforms.push(new Platform(0, canvas.height - 50, canvas.width, 50, '#333'));
+                    platforms.push(new Platform(0, GAME_HEIGHT - 50, GAME_WIDTH, 50, '#333'));
                     platforms.push(new Platform(150, 350, 80, 20, '#666', true));
                     platforms.push(new Platform(350, 300, 80, 20, '#666', true));
                     platforms.push(new Platform(550, 250, 80, 20, '#666', true));
                     platforms.push(new Platform(700, 350, 80, 20, '#666', true));
                     
                     // Enemigos
-                    enemies.push(new Enemy(200, canvas.height - 90, 'punk'));
+                    enemies.push(new Enemy(200, GAME_HEIGHT - 90, 'punk'));
                     enemies.push(new Enemy(400, 260, 'punk'));
                     enemies.push(new Enemy(600, 210, 'punk'));
                     
@@ -1022,8 +1017,8 @@
                     // Fondo (amplificadores)
                     for (let i = 0; i < 4; i++) {
                         backgroundObjects.push(new BackgroundObject(
-                            Math.random() * canvas.width * 2, 
-                            canvas.height - 120, 
+                            Math.random() * GAME_WIDTH * 2, 
+                            GAME_HEIGHT - 120, 
                             60, 
                             80, 
                             'amplifier'
@@ -1035,14 +1030,14 @@
                     
                 case 3: // Desierto del Beat
                     // Plataformas móviles
-                    platforms.push(new Platform(0, canvas.height - 50, canvas.width, 50, '#CC9900'));
+                    platforms.push(new Platform(0, GAME_HEIGHT - 50, GAME_WIDTH, 50, '#CC9900'));
                     platforms.push(new Platform(100, 400, 80, 20, '#FFCC00', true));
                     platforms.push(new Platform(300, 350, 80, 20, '#FFCC00', true));
                     platforms.push(new Platform(500, 300, 80, 20, '#FFCC00', true));
                     platforms.push(new Platform(700, 250, 80, 20, '#FFCC00', true));
                     
                     // Enemigos
-                    enemies.push(new Enemy(150, canvas.height - 90, 'scorpion'));
+                    enemies.push(new Enemy(150, GAME_HEIGHT - 90, 'scorpion'));
                     enemies.push(new Enemy(350, 310, 'scorpion'));
                     enemies.push(new Enemy(550, 260, 'scorpion'));
                     
@@ -1058,7 +1053,7 @@
                     
                 case 4: // Cuevas del Piano Fantasma
                     // Plataformas (teclas de piano)
-                    platforms.push(new Platform(0, canvas.height - 50, canvas.width, 50, '#000'));
+                    platforms.push(new Platform(0, GAME_HEIGHT - 50, GAME_WIDTH, 50, '#000'));
                     for (let i = 0; i < 7; i++) {
                         platforms.push(new Platform(
                             100 + i * 80, 
@@ -1088,7 +1083,7 @@
                 
                 default:
                     // Nivel genérico si no hay configuración específica
-                    platforms.push(new Platform(0, canvas.height - 50, canvas.width, 50, '#333'));
+                    platforms.push(new Platform(0, GAME_HEIGHT - 50, GAME_WIDTH, 50, '#333'));
                     for (let i = 0; i < 5; i++) {
                         platforms.push(new Platform(
                             100 + i * 150, 
@@ -1133,7 +1128,7 @@
                 
                 // Efecto visual de ritmo
                 ctx.fillStyle = 'rgba(255, 109, 0, 0.2)';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
                 
                 setTimeout(() => {
                     onBeat = false;
@@ -1141,7 +1136,7 @@
             }
             
             // Limpiar canvas
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
             
             // Dibujar fondo según nivel
             switch (currentLevel) {
@@ -1160,7 +1155,7 @@
                 default:
                     ctx.fillStyle = '#111';
             }
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
             
             // Actualizar y dibujar objetos de fondo
             for (const bgObj of backgroundObjects) {
@@ -1207,82 +1202,96 @@
             requestAnimationFrame(gameLoop);
         }
         
-        // Event listeners para controles
-        document.addEventListener('keydown', (e) => {
-            if (!gameRunning) return;
+        // Event listeners para controles táctiles
+        function setupTouchControls() {
+            // Controles de movimiento izquierda/derecha
+            leftBtn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                player.velocityX = -player.speed;
+                player.facingRight = false;
+            });
             
-            switch (e.key) {
-                case 'ArrowLeft':
-                case 'a':
-                    player.velocityX = -player.speed;
-                    player.facingRight = false;
-                    break;
-                case 'ArrowRight':
-                case 'd':
-                    player.velocityX = player.speed;
-                    player.facingRight = true;
-                    break;
-                case 'ArrowUp':
-                case 'w':
-                case ' ':
-                    player.jump();
-                    break;
-                case 'j':
-                case 'f':
-                    player.attack();
-                    break;
-            }
-        });
-        
-        document.addEventListener('keyup', (e) => {
-            if (!gameRunning) return;
+            leftBtn.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                if (player.velocityX < 0) player.velocityX = 0;
+            });
             
-            switch (e.key) {
-                case 'ArrowLeft':
-                case 'a':
-                case 'ArrowRight':
-                case 'd':
-                    if ((e.key === 'ArrowLeft' || e.key === 'a') && player.velocityX < 0) {
-                        player.velocityX = 0;
-                    } else if ((e.key === 'ArrowRight' || e.key === 'd') && player.velocityX > 0) {
-                        player.velocityX = 0;
-                    }
-                    break;
-            }
-        });
+            rightBtn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                player.velocityX = player.speed;
+                player.facingRight = true;
+            });
+            
+            rightBtn.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                if (player.velocityX > 0) player.velocityX = 0;
+            });
+            
+            // Botón de salto
+            jumpBtn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                player.jump();
+            });
+            
+            // Botón de ataque
+            attackBtn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                player.attack();
+            });
+            
+            // Prevenir eventos táctiles por defecto en los botones
+            const buttons = document.querySelectorAll('.mobile-btn');
+            buttons.forEach(btn => {
+                btn.addEventListener('touchstart', (e) => e.preventDefault());
+                btn.addEventListener('touchend', (e) => e.preventDefault());
+            });
+        }
         
-        // Controles táctiles para móviles
-        leftBtn.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            player.velocityX = -player.speed;
-            player.facingRight = false;
-        });
-        
-        leftBtn.addEventListener('touchend', (e) => {
-            e.preventDefault();
-            if (player.velocityX < 0) player.velocityX = 0;
-        });
-        
-        rightBtn.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            player.velocityX = player.speed;
-            player.facingRight = true;
-        });
-        
-        rightBtn.addEventListener('touchend', (e) => {
-            e.preventDefault();
-            if (player.velocityX > 0) player.velocityX = 0;
-        });
-        
-        jumpBtn.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            player.jump();
-        });
-        
-        attackBtn.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            player.attack();
-        });
+        // Event listeners para controles de teclado
+        function setupKeyboardControls() {
+            document.addEventListener('keydown', (e) => {
+                if (!gameRunning) return;
+                
+                switch (e.key) {
+                    case 'ArrowLeft':
+                    case 'a':
+                        player.velocityX = -player.speed;
+                        player.facingRight = false;
+                        break;
+                    case 'ArrowRight':
+                    case 'd':
+                        player.velocityX = player.speed;
+                        player.facingRight = true;
+                        break;
+                    case 'ArrowUp':
+                    case 'w':
+                    case ' ':
+                        player.jump();
+                        break;
+                    case 'j':
+                    case 'f':
+                        player.attack();
+                        break;
+                }
+            });
+            
+            document.addEventListener('keyup', (e) => {
+                if (!gameRunning) return;
+                
+                switch (e.key) {
+                    case 'ArrowLeft':
+                    case 'a':
+                    case 'ArrowRight':
+                    case 'd':
+                        if ((e.key === 'ArrowLeft' || e.key === 'a') && player.velocityX < 0) {
+                            player.velocityX = 0;
+                        } else if ((e.key === 'ArrowRight' || e.key === 'd') && player.velocityX > 0) {
+                            player.velocityX = 0;
+                        }
+                        break;
+                }
+            });
+        }
         
         // Botones de UI
         startButton.addEventListener('click', () => {
@@ -1334,6 +1343,10 @@
             saveGame();
         });
         
+        // Configurar controles
+        setupTouchControls();
+        setupKeyboardControls();
+        
         // Inicializar pantalla de inicio
         initLevel(1); // Solo para mostrar algo en el canvas
         
@@ -1343,6 +1356,13 @@
                 saveGame();
             }
         });
+        
+        // Prevenir el desplazamiento en dispositivos móviles
+        document.addEventListener('touchmove', (e) => {
+            if (gameRunning) {
+                e.preventDefault();
+            }
+        }, { passive: false });
     </script>
 </body>
 </html>

@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfil Biográfico</title>
+    <title>Perfil Biográfico - Sistema QR</title>
+    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
     <style>
         * {
             margin: 0;
@@ -13,51 +14,110 @@
         }
         
         body {
-            background-color: #f5f5f5;
-            color: #333;
+            background-color: #fefaf0;
+            color: #5a4a3a;
             line-height: 1.6;
             padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .qr-scanner-container {
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: #fffdf6;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(139, 121, 105, 0.15);
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .qr-scanner-container h1 {
+            color: #b08c5a;
+            margin-bottom: 20px;
+        }
+        
+        #qr-video {
+            width: 100%;
+            max-width: 300px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border: 2px solid #e8d5c4;
+        }
+        
+        #qr-canvas {
+            display: none;
+        }
+        
+        .qr-result {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #f5e9da;
+            display: none;
+        }
+        
+        .qr-result.success {
+            background-color: #d4edda;
+            color: #155724;
+            display: block;
+        }
+        
+        .qr-result.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            display: block;
         }
         
         .container {
             max-width: 800px;
             margin: 0 auto;
-            background-color: white;
+            background-color: #fffdf6;
             border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 20px rgba(139, 121, 105, 0.15);
             overflow: hidden;
+            display: none;
         }
         
         .header {
-            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-            color: white;
+            background: linear-gradient(135deg, #d4b896 0%, #e8d5c4 100%);
+            color: #5a4a3a;
             padding: 40px 30px;
             text-align: center;
+            position: relative;
         }
         
-        .profile-image {
+        .profile-image-container {
             width: 150px;
             height: 150px;
             border-radius: 50%;
-            border: 5px solid rgba(255, 255, 255, 0.3);
+            border: 5px solid rgba(255, 255, 255, 0.6);
             margin: 0 auto 20px;
             overflow: hidden;
-            background-color: #ddd;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 60px;
+            background-color: #f5e9da;
+            box-shadow: 0 4px 10px rgba(139, 121, 105, 0.2);
+        }
+        
+        .profile-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
         
         h1 {
             font-size: 2.5rem;
             margin-bottom: 10px;
+            color: #5a4a3a;
         }
         
         .dates {
             font-size: 1.2rem;
             opacity: 0.9;
             margin-bottom: 5px;
+            color: #7a6a5a;
         }
         
         .content {
@@ -65,10 +125,10 @@
         }
         
         h2 {
-            color: #6a11cb;
+            color: #b08c5a;
             margin-bottom: 20px;
             padding-bottom: 10px;
-            border-bottom: 2px solid #f0f0f0;
+            border-bottom: 2px solid #f0e6d8;
         }
         
         .biography {
@@ -93,7 +153,7 @@
         .year {
             min-width: 100px;
             font-weight: bold;
-            color: #6a11cb;
+            color: #b08c5a;
         }
         
         .event {
@@ -101,11 +161,31 @@
         }
         
         .footer {
-            background-color: #f9f9f9;
+            background-color: #f5e9da;
             padding: 20px;
             text-align: center;
-            color: #777;
-            border-top: 1px solid #eee;
+            color: #7a6a5a;
+            border-top: 1px solid #e8d5c4;
+        }
+        
+        .hidden-code {
+            display: none;
+        }
+        
+        .btn {
+            background-color: #b08c5a;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 15px;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: #9a7a4d;
         }
         
         @media (max-width: 600px) {
@@ -132,10 +212,23 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    <!-- Contenedor del escáner QR -->
+    <div class="qr-scanner-container" id="qr-scanner">
+        <h1>Verificación de Perfil</h1>
+        <p>Escanea el código QR para acceder al perfil biográfico</p>
+        <video id="qr-video" playsinline></video>
+        <canvas id="qr-canvas"></canvas>
+        <div id="qr-result" class="qr-result"></div>
+        <button class="btn" id="start-scanner">Iniciar Escáner</button>
+    </div>
+    
+    <!-- Perfil biográfico (oculto inicialmente) -->
+    <div class="container" id="profile-container">
         <div class="header">
-            <div class="profile-image">👤</div>
-            <h1>Nombre de la Persona</h1>
+            <div class="profile-image-container">
+                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Foto de perfil" class="profile-image">
+            </div>
+            <h1>María Elena García</h1>
             <div class="dates">15 de marzo de 1920 - 12 de junio de 2005</div>
             <div class="dates">(85 años)</div>
         </div>
@@ -143,34 +236,44 @@
         <div class="content">
             <h2>Biografía</h2>
             <div class="biography">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nisl eget ultricies tincidunt, nisl nisl aliquam nisl, eget ultricies nisl nisl eget nisl. Nullam auctor, nisl eget ultricies tincidunt, nisl nisl aliquam nisl, eget ultricies nisl nisl eget nisl.</p>
+                <p>María Elena García fue una destacada educadora y filántropa mexicana, reconocida por su incansable labor en favor de la educación infantil en comunidades rurales. Nacida en una familia humilde en el estado de Oaxaca, desde temprana edad mostró un profundo interés por la enseñanza y el bienestar de los más necesitados.</p>
                 
-                <p>Vivamus euismod, nisl eget ultricies tincidunt, nisl nisl aliquam nisl, eget ultricies nisl nisl eget nisl. Nullam auctor, nisl eget ultricies tincidunt, nisl nisl aliquam nisl, eget ultricies nisl nisl eget nisl. Vivamus euismod, nisl eget ultricies tincidunt, nisl nisl aliquam nisl, eget ultricies nisl nisl eget nisl.</p>
+                <p>Tras completar sus estudios en la Ciudad de México, regresó a su tierra natal para fundar la primera escuela rural de la región, donde implementó métodos pedagógicos innovadores que combinaban la enseñanza tradicional con el respeto por las culturas indígenas locales. Su enfoque educativo fue pionero para la época y sentó las bases para programas educativos posteriores.</p>
                 
-                <p>Phasellus euismod, nisl eget ultricies tincidunt, nisl nisl aliquam nisl, eget ultricies nisl nisl eget nisl. Nullam auctor, nisl eget ultricies tincidunt, nisl nisl aliquam nisl, eget ultricies nisl nisl eget nisl. Vivamus euismod, nisl eget ultricies tincidunt, nisl nisl aliquam nisl, eget ultricies nisl nisl eget nisl.</p>
+                <p>A lo largo de su vida, María Elena estableció más de 50 escuelas en comunidades marginadas, formó a cientos de maestros y promovió la creación de bibliotecas comunitarias. Su legado perdura a través de la Fundación María Elena García, que continúa su labor educativa en el sureste de México.</p>
             </div>
             
             <div class="timeline">
-                <h2>Linea de Tiempo</h2>
+                <h2>Línea de Tiempo</h2>
                 
                 <div class="timeline-item">
                     <div class="year">1920</div>
-                    <div class="event">Nacimiento en Ciudad, País. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div>
+                    <div class="event">Nacimiento en San Pedro Mixtepec, Oaxaca, México. Hija de agricultores, fue la mayor de seis hermanos.</div>
                 </div>
                 
                 <div class="timeline-item">
-                    <div class="year">1940</div>
-                    <div class="event">Evento importante en su vida. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div>
+                    <div class="year">1938</div>
+                    <div class="event">Se traslada a la Ciudad de México para estudiar pedagogía en la Escuela Normal Superior.</div>
                 </div>
                 
                 <div class="timeline-item">
-                    <div class="year">1965</div>
-                    <div class="event">Logro significativo. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div>
+                    <div class="year">1945</div>
+                    <div class="event">Regresa a Oaxaca y funda su primera escuela rural en su comunidad natal.</div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="year">1962</div>
+                    <div class="event">Recibe el Premio Nacional de Educación por sus innovadores métodos pedagógicos.</div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="year">1980</div>
+                    <div class="event">Establece la Fundación María Elena García para expandir su labor educativa.</div>
                 </div>
                 
                 <div class="timeline-item">
                     <div class="year">2005</div>
-                    <div class="event">Fallecimiento en Ciudad, País. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div>
+                    <div class="event">Fallece en Oaxaca a los 85 años, dejando un legado de más de 50 escuelas fundadas.</div>
                 </div>
             </div>
         </div>
@@ -178,6 +281,96 @@
         <div class="footer">
             <p>© 2023 Biografía - Todos los derechos reservados</p>
         </div>
+        
+        <!-- Código oculto para verificación -->
+        <div class="hidden-code">1232</div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const video = document.getElementById('qr-video');
+            const canvas = document.getElementById('qr-canvas');
+            const context = canvas.getContext('2d');
+            const qrResult = document.getElementById('qr-result');
+            const startScannerBtn = document.getElementById('start-scanner');
+            const qrScannerContainer = document.getElementById('qr-scanner');
+            const profileContainer = document.getElementById('profile-container');
+            const hiddenCode = document.querySelector('.hidden-code').textContent.trim();
+            
+            let scanning = false;
+            
+            // Función para iniciar el escáner
+            function startScanner() {
+                navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
+                    .then(function(stream) {
+                        video.srcObject = stream;
+                        video.setAttribute("playsinline", true);
+                        video.play();
+                        requestAnimationFrame(tick);
+                        scanning = true;
+                        startScannerBtn.textContent = "Detener Escáner";
+                    })
+                    .catch(function(err) {
+                        console.error("Error al acceder a la cámara: ", err);
+                        qrResult.textContent = "Error al acceder a la cámara. Asegúrate de permitir el acceso.";
+                        qrResult.className = "qr-result error";
+                    });
+            }
+            
+            // Función para detener el escáner
+            function stopScanner() {
+                if (video.srcObject) {
+                    video.srcObject.getTracks().forEach(track => track.stop());
+                }
+                scanning = false;
+                startScannerBtn.textContent = "Iniciar Escáner";
+            }
+            
+            // Función para procesar los frames del video
+            function tick() {
+                if (video.readyState === video.HAVE_ENOUGH_DATA) {
+                    canvas.height = video.videoHeight;
+                    canvas.width = video.videoWidth;
+                    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                    
+                    const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+                    const code = jsQR(imageData.data, imageData.width, imageData.height);
+                    
+                    if (code) {
+                        // Código QR detectado
+                        if (code.data === hiddenCode) {
+                            // Código correcto
+                            qrResult.textContent = "¡Código verificado correctamente! Accediendo al perfil...";
+                            qrResult.className = "qr-result success";
+                            
+                            // Detener el escáner y mostrar el perfil después de un breve retraso
+                            setTimeout(function() {
+                                stopScanner();
+                                qrScannerContainer.style.display = 'none';
+                                profileContainer.style.display = 'block';
+                            }, 1500);
+                        } else {
+                            // Código incorrecto
+                            qrResult.textContent = "Código incorrecto. Intenta con otro código QR.";
+                            qrResult.className = "qr-result error";
+                        }
+                    }
+                }
+                
+                if (scanning) {
+                    requestAnimationFrame(tick);
+                }
+            }
+            
+            // Control del botón de inicio/detención del escáner
+            startScannerBtn.addEventListener('click', function() {
+                if (scanning) {
+                    stopScanner();
+                } else {
+                    startScanner();
+                }
+            });
+        });
+    </script>
 </body>
 </html>

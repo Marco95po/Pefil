@@ -2,763 +2,182 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Dibuja un Círculo Perfecto 2025</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil Biográfico</title>
     <style>
-        :root {
-            --primary: #FF6B00;
-            --secondary: #FF9500;
-            --accent: #FFAA00;
-            --dark: #121212;
-            --light: #F5F5F5;
-            --success: #FF8C00;
-            --glass: rgba(0, 0, 0, 0.3);
-            --particle: #FFA500;
-        }
-        
         * {
+            margin: 0;
+            padding: 0;
             box-sizing: border-box;
-            touch-action: manipulation;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
         body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            text-align: center;
-            margin: 0;
-            padding: 10px;
-            background: linear-gradient(135deg, #000000, #121212);
-            color: var(--light);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start; /* Cambiado para permitir scroll */
-            overflow-x: hidden;
-            position: relative;
-        }
-        
-        .scroll-container {
-            width: 100%;
-            max-width: 100%;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px 0;
-            flex-grow: 1;
-        }
-        
-        h1 {
-            font-size: clamp(1.8rem, 5vw, 2.5rem);
-            margin-bottom: 0.5rem;
-            background: linear-gradient(to right, var(--success), var(--accent));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: 0 2px 10px rgba(255, 140, 0, 0.3);
-            line-height: 1.3;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
         }
         
         .container {
-            background: var(--glass);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: clamp(1rem, 3vw, 2rem);
-            box-shadow: 0 8px 32px rgba(255, 106, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            width: 95%;
-            max-width: 500px;
-            transition: all 0.5s ease;
-            position: relative;
-            z-index: 10;
-            margin: 10px 0;
-        }
-        
-        #instructions {
-            margin: clamp(0.8rem, 2vw, 1.5rem) 0;
-            font-size: clamp(0.9rem, 3vw, 1.1rem);
-            line-height: 1.6;
-            opacity: 0.9;
-            color: rgba(255, 255, 255, 0.8);
-            padding: 0 5px;
-        }
-        
-        .canvas-container {
-            position: relative;
-            width: 100%;
-            margin: 1rem auto;
-        }
-        
-        #canvas {
-            width: 100%;
-            height: auto;
-            max-width: 400px;
-            max-height: 400px;
-            aspect-ratio: 1/1;
-            border: 2px solid rgba(255, 140, 0, 0.3);
-            border-radius: 15px;
-            display: block;
+            max-width: 800px;
             margin: 0 auto;
-            background-color: rgba(0, 0, 0, 0.3);
-            cursor: crosshair;
-            transition: box-shadow 0.3s;
-            touch-action: none;
-        }
-        
-        #canvas:hover {
-            box-shadow: 0 0 30px rgba(255, 140, 0, 0.3);
-        }
-        
-        #result {
-            font-size: clamp(1.4rem, 4vw, 1.8rem);
-            font-weight: 600;
-            margin: clamp(0.8rem, 2vw, 1.5rem);
-            background: linear-gradient(to right, var(--success), var(--accent));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-        }
-        
-        button {
-            padding: clamp(10px, 3vw, 12px) clamp(20px, 5vw, 28px);
-            font-size: clamp(0.9rem, 3vw, 1rem);
-            font-weight: 600;
-            background: linear-gradient(45deg, var(--primary), var(--secondary));
-            color: black;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(255, 106, 0, 0.4);
-            position: relative;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
             overflow: hidden;
-            width: auto;
-            min-width: 180px;
-            margin: 5px 0;
         }
         
-        button:hover, button:focus {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 106, 0, 0.6);
+        .header {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
             color: white;
-            outline: none;
-        }
-        
-        button:active {
-            transform: translateY(0);
-        }
-        
-        button::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transform: translateX(-100%);
-            transition: transform 0.6s ease;
-        }
-        
-        button:hover::after {
-            transform: translateX(100%);
-        }
-        
-        .progress-ring {
-            position: relative;
-            width: clamp(90px, 25vw, 120px);
-            height: clamp(90px, 25vw, 120px);
-            margin: clamp(10px, 3vw, 20px) auto;
-        }
-        
-        .progress-ring__circle {
-            transform: rotate(-90deg);
-            transform-origin: 50% 50%;
-        }
-        
-        .progress-ring__circle-bg {
-            stroke: rgba(255, 255, 255, 0.1);
-            stroke-width: 6;
-            fill: none;
-        }
-        
-        .progress-ring__circle-fill {
-            stroke: var(--success);
-            stroke-width: 6;
-            stroke-linecap: round;
-            fill: none;
-            transition: stroke-dashoffset 0.5s ease;
-            filter: drop-shadow(0 0 5px rgba(255, 140, 0, 0.7));
-        }
-        
-        .ai-feedback {
-            font-size: clamp(0.85rem, 3vw, 1rem);
-            margin-top: clamp(0.5rem, 2vw, 1rem);
-            font-style: italic;
-            opacity: 0.8;
-            color: rgba(255, 255, 255, 0.8);
-            padding: 0 10px;
-        }
-        
-        /* Estilos para el mensaje de límite */
-        .limit-message {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(18, 18, 18, 0.95);
-            z-index: 100;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
+            padding: 40px 30px;
             text-align: center;
         }
         
-        .limit-message h2 {
-            font-size: clamp(1.5rem, 6vw, 2rem);
-            color: var(--success);
-            margin-bottom: 1rem;
-            text-shadow: 0 0 10px rgba(255, 140, 0, 0.5);
-        }
-        
-        .limit-message p {
-            font-size: clamp(1rem, 3.5vw, 1.2rem);
-            margin-bottom: clamp(1rem, 3vw, 2rem);
-            max-width: 500px;
-            color: rgba(255, 255, 255, 0.8);
-            padding: 0 15px;
-        }
-        
-        .timer {
-            font-size: clamp(1.8rem, 7vw, 2.5rem);
-            font-weight: bold;
-            color: var(--accent);
-            margin: clamp(0.5rem, 2vw, 1rem) 0;
-            font-family: monospace;
-            text-shadow: 0 0 10px rgba(255, 170, 0, 0.5);
-        }
-        
-        /* Partículas */
-        .particle {
-            position: absolute;
-            background-color: var(--particle);
+        .profile-image {
+            width: 150px;
+            height: 150px;
             border-radius: 50%;
-            pointer-events: none;
-            z-index: 1;
-            opacity: 0.7;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            margin: 0 auto 20px;
+            overflow: hidden;
+            background-color: #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
         }
         
-        /* Orientación landscape para móviles */
-        @media (max-height: 500px) and (orientation: landscape) {
-            .container {
-                max-width: 90%;
-                padding: 10px;
-                flex-direction: row;
-                flex-wrap: wrap;
-                justify-content: center;
-                align-items: center;
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .dates {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        h2 {
+            color: #6a11cb;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .biography {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            text-align: justify;
+        }
+        
+        .biography p {
+            margin-bottom: 15px;
+        }
+        
+        .timeline {
+            margin-top: 30px;
+        }
+        
+        .timeline-item {
+            display: flex;
+            margin-bottom: 25px;
+        }
+        
+        .year {
+            min-width: 100px;
+            font-weight: bold;
+            color: #6a11cb;
+        }
+        
+        .event {
+            flex-grow: 1;
+        }
+        
+        .footer {
+            background-color: #f9f9f9;
+            padding: 20px;
+            text-align: center;
+            color: #777;
+            border-top: 1px solid #eee;
+        }
+        
+        @media (max-width: 600px) {
+            .header {
+                padding: 30px 20px;
             }
             
             h1 {
-                width: 100%;
+                font-size: 2rem;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .timeline-item {
+                flex-direction: column;
+            }
+            
+            .year {
                 margin-bottom: 5px;
-                font-size: 1.5rem;
-            }
-            
-            #instructions {
-                width: 100%;
-                margin: 5px 0;
-                font-size: 0.9rem;
-            }
-            
-            .canvas-container {
-                width: 60%;
-                max-width: 250px;
-                margin: 5px;
-            }
-            
-            .progress-ring {
-                width: 80px;
-                height: 80px;
-                margin: 5px;
-            }
-            
-            #result, #feedback {
-                margin: 5px;
-                font-size: 1rem;
-            }
-            
-            button {
-                margin: 5px;
-                padding: 8px 16px;
-                font-size: 0.9rem;
-            }
-        }
-        
-        /* Dispositivos muy pequeños */
-        @media (max-width: 350px) {
-            h1 {
-                font-size: 1.5rem;
-            }
-            
-            #instructions {
-                font-size: 0.8rem;
-            }
-            
-            button {
-                min-width: 160px;
-                padding: 8px 16px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="scroll-container">
-        <div class="container" id="main-container">
-            <h1>Dibuja un Círculo Perfecto</h1>
-            <div id="instructions">
-                Usa tu dedo o el mouse para dibujar un círculo. Suelta para evaluar tu precisión.
+    <div class="container">
+        <div class="header">
+            <div class="profile-image">👤</div>
+            <h1>Nombre de la Persona</h1>
+            <div class="dates">15 de marzo de 1920 - 12 de junio de 2005</div>
+            <div class="dates">(85 años)</div>
+        </div>
+        
+        <div class="content">
+            <h2>Biografía</h2>
+            <div class="biography">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nisl eget ultricies tincidunt, nisl nisl aliquam nisl, eget ultricies nisl nisl eget nisl. Nullam auctor, nisl eget ultricies tincidunt, nisl nisl aliquam nisl, eget ultricies nisl nisl eget nisl.</p>
+                
+                <p>Vivamus euismod, nisl eget ultricies tincidunt, nisl nisl aliquam nisl, eget ultricies nisl nisl eget nisl. Nullam auctor, nisl eget ultricies tincidunt, nisl nisl aliquam nisl, eget ultricies nisl nisl eget nisl. Vivamus euismod, nisl eget ultricies tincidunt, nisl nisl aliquam nisl, eget ultricies nisl nisl eget nisl.</p>
+                
+                <p>Phasellus euismod, nisl eget ultricies tincidunt, nisl nisl aliquam nisl, eget ultricies nisl nisl eget nisl. Nullam auctor, nisl eget ultricies tincidunt, nisl nisl aliquam nisl, eget ultricies nisl nisl eget nisl. Vivamus euismod, nisl eget ultricies tincidunt, nisl nisl aliquam nisl, eget ultricies nisl nisl eget nisl.</p>
             </div>
             
-            <div class="canvas-container">
-                <canvas id="canvas"></canvas>
+            <div class="timeline">
+                <h2>Linea de Tiempo</h2>
+                
+                <div class="timeline-item">
+                    <div class="year">1920</div>
+                    <div class="event">Nacimiento en Ciudad, País. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="year">1940</div>
+                    <div class="event">Evento importante en su vida. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="year">1965</div>
+                    <div class="event">Logro significativo. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="year">2005</div>
+                    <div class="event">Fallecimiento en Ciudad, País. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div>
+                </div>
             </div>
-            
-            <div class="progress-ring">
-                <svg viewBox="0 0 100 100">
-                    <circle class="progress-ring__circle-bg" cx="50" cy="50" r="45" />
-                    <circle class="progress-ring__circle-fill" cx="50" cy="50" r="45" stroke-dasharray="282.743" stroke-dashoffset="282.743" />
-                </svg>
-            </div>
-            
-            <div id="result"></div>
-            <div id="feedback" class="ai-feedback"></div>
-            <button id="reset">Intentar de nuevo</button>
+        </div>
+        
+        <div class="footer">
+            <p>© 2023 Biografía - Todos los derechos reservados</p>
         </div>
     </div>
-
-    <div class="limit-message" id="limit-message">
-        <h2>¡Límite de intentos alcanzado!</h2>
-        <p>Has alcanzado el máximo de 5 intentos. Por favor, espera 1 hora para volver a intentarlo.</p>
-        <div class="timer" id="timer">01:00:00</div>
-        <p>Mientras tanto, podrías practicar dibujando círculos en papel. ¡La práctica hace al maestro!</p>
-    </div>
-
-    <script>
-        const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d');
-        const resultDiv = document.getElementById('result');
-        const feedbackDiv = document.getElementById('feedback');
-        const resetBtn = document.getElementById('reset');
-        const progressCircle = document.querySelector('.progress-ring__circle-fill');
-        const mainContainer = document.getElementById('main-container');
-        const limitMessage = document.getElementById('limit-message');
-        const timerDisplay = document.getElementById('timer');
-        
-        let isDrawing = false;
-        let points = [];
-        let center = { x: 0, y: 0 };
-        let radius = 0;
-        let attempts = 0;
-        let cooldownTimeout;
-        let timerInterval;
-        let particles = [];
-        
-        // Ajustar tamaño del canvas al cargar y al redimensionar
-        function resizeCanvas() {
-            const canvasContainer = document.querySelector('.canvas-container');
-            const size = Math.min(canvasContainer.offsetWidth, 400);
-            
-            canvas.width = size;
-            canvas.height = size;
-            
-            // Redibujar si hay puntos (para mantener el dibujo al rotar pantalla)
-            if (points.length > 0) {
-                redrawCanvas();
-            }
-        }
-        
-        function redrawCanvas() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            if (points.length > 1) {
-                ctx.strokeStyle = '#FF8C00';
-                ctx.lineWidth = 4;
-                ctx.lineJoin = 'round';
-                ctx.lineCap = 'round';
-                ctx.shadowBlur = 15;
-                ctx.shadowColor = 'rgba(255, 140, 0, 0.7)';
-                
-                ctx.beginPath();
-                ctx.moveTo(points[0].x, points[0].y);
-                
-                for (let i = 1; i < points.length; i++) {
-                    ctx.lineTo(points[i].x, points[i].y);
-                }
-                
-                ctx.stroke();
-                
-                // Si el dibujo está completo, dibujar el círculo de referencia
-                if (!isDrawing && radius > 0) {
-                    ctx.beginPath();
-                    ctx.arc(center.x, center.y, radius, 0, Math.PI * 2);
-                    ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
-                    ctx.lineWidth = 3;
-                    ctx.shadowBlur = 15;
-                    ctx.shadowColor = 'rgba(255, 140, 0, 0.7)';
-                    ctx.stroke();
-                }
-            }
-        }
-        
-        // Inicializar canvas
-        window.addEventListener('load', () => {
-            resizeCanvas();
-            checkAttemptLimit();
-        });
-        
-        window.addEventListener('resize', () => {
-            resizeCanvas();
-        });
-        
-        // Event listeners para mouse y pantalla táctil
-        canvas.addEventListener('mousedown', startDrawing);
-        canvas.addEventListener('mousemove', draw);
-        canvas.addEventListener('mouseup', stopDrawing);
-        canvas.addEventListener('mouseout', stopDrawing);
-        
-        canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
-        canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
-        canvas.addEventListener('touchend', stopDrawing);
-        
-        resetBtn.addEventListener('click', reset);
-        
-        function handleTouchStart(e) {
-            e.preventDefault();
-            const touch = e.touches[0];
-            const rect = canvas.getBoundingClientRect();
-            const mouseEvent = new MouseEvent('mousedown', {
-                clientX: touch.clientX,
-                clientY: touch.clientY
-            });
-            canvas.dispatchEvent(mouseEvent);
-        }
-        
-        function handleTouchMove(e) {
-            e.preventDefault();
-            const touch = e.touches[0];
-            const mouseEvent = new MouseEvent('mousemove', {
-                clientX: touch.clientX,
-                clientY: touch.clientY
-            });
-            canvas.dispatchEvent(mouseEvent);
-        }
-        
-        function startDrawing(e) {
-            isDrawing = true;
-            points = [];
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            resultDiv.textContent = '';
-            feedbackDiv.textContent = '';
-            
-            // Configuración del estilo de dibujo
-            ctx.strokeStyle = '#FF8C00';
-            ctx.lineWidth = 4;
-            ctx.lineJoin = 'round';
-            ctx.lineCap = 'round';
-            ctx.shadowBlur = 15;
-            ctx.shadowColor = 'rgba(255, 140, 0, 0.7)';
-            
-            // Registrar el primer punto
-            const rect = canvas.getBoundingClientRect();
-            const scaleX = canvas.width / rect.width;
-            const scaleY = canvas.height / rect.height;
-            
-            const x = (e.clientX - rect.left) * scaleX;
-            const y = (e.clientY - rect.top) * scaleY;
-            
-            points.push({ x, y });
-            
-            ctx.beginPath();
-            ctx.moveTo(x, y);
-        }
-        
-        function draw(e) {
-            if (!isDrawing) return;
-            
-            const rect = canvas.getBoundingClientRect();
-            const scaleX = canvas.width / rect.width;
-            const scaleY = canvas.height / rect.height;
-            
-            const x = (e.clientX - rect.left) * scaleX;
-            const y = (e.clientY - rect.top) * scaleY;
-            
-            points.push({ x, y });
-            
-            ctx.lineTo(x, y);
-            ctx.stroke();
-        }
-        
-        function stopDrawing() {
-            if (!isDrawing) return;
-            isDrawing = false;
-            
-            // Incrementar el contador de intentos solo si se dibujó algo
-            if (points.length > 5) {
-                attempts++;
-                localStorage.setItem('circleAttempts', attempts);
-                localStorage.setItem('lastAttemptTime', Date.now());
-            }
-            
-            // Calcular el círculo perfecto que mejor se ajusta
-            calculateBestFitCircle();
-            
-            // Dibujar el círculo perfecto
-            ctx.beginPath();
-            ctx.arc(center.x, center.y, radius, 0, Math.PI * 2);
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
-            ctx.lineWidth = 3;
-            ctx.shadowBlur = 15;
-            ctx.shadowColor = 'rgba(255, 140, 0, 0.7)';
-            ctx.stroke();
-            
-            // Calcular precisión
-            const accuracy = calculateAccuracy();
-            updateProgressRing(accuracy);
-            resultDiv.textContent = `${accuracy.toFixed(1)}% de precisión`;
-            
-            // Mostrar feedback de IA
-            showAIFeedback(accuracy);
-            
-            // Verificar si se alcanzó el 100% de precisión
-            if (accuracy >= 100) {
-                setTimeout(() => {
-                    window.location.href = 'reclamarregalo.html';
-                }, 1500);
-                return;
-            }
-            
-            // Verificar si se alcanzó el límite de intentos
-            if (attempts >= 5) {
-                showLimitMessage();
-            }
-        }
-        
-        function calculateBestFitCircle() {
-            // Algoritmo de ajuste de círculo por mínimos cuadrados
-            
-            // Paso 1: Calcular centro aproximado
-            let sumX = 0, sumY = 0;
-            for (const point of points) {
-                sumX += point.x;
-                sumY += point.y;
-            }
-            center.x = sumX / points.length;
-            center.y = sumY / points.length;
-            
-            // Paso 2: Calcular radio promedio con ajuste iterativo
-            let sumR = 0;
-            let radii = [];
-            
-            for (const point of points) {
-                const dx = point.x - center.x;
-                const dy = point.y - center.y;
-                const r = Math.sqrt(dx * dx + dy * dy);
-                sumR += r;
-                radii.push(r);
-            }
-            
-            // Calcular desviación estándar para ajuste fino
-            const meanRadius = sumR / points.length;
-            let squaredDifferences = 0;
-            
-            for (const r of radii) {
-                squaredDifferences += Math.pow(r - meanRadius, 2);
-            }
-            
-            const stdDev = Math.sqrt(squaredDifferences / points.length);
-            
-            // Filtrar outliers (más de 1.5 desviaciones estándar)
-            const filteredRadii = radii.filter(r => Math.abs(r - meanRadius) <= 1.5 * stdDev);
-            
-            // Calcular radio final con datos filtrados
-            radius = filteredRadii.reduce((a, b) => a + b, 0) / filteredRadii.length;
-        }
-        
-        function calculateAccuracy() {
-            if (points.length < 10) return 0;
-            
-            let totalError = 0;
-            let maxDeviation = 0;
-            
-            for (const point of points) {
-                const dx = point.x - center.x;
-                const dy = point.y - center.y;
-                const distance = Math.sqrt(dx * dx + dy * dy);
-                const error = Math.abs(distance - radius);
-                totalError += error;
-                if (error > maxDeviation) maxDeviation = error;
-            }
-            
-            const avgError = totalError / points.length;
-            
-            // Fórmula de precisión mejorada
-            const baseAccuracy = 100 * Math.exp(-avgError / (canvas.width * 0.075)); // Ajuste basado en el tamaño del canvas
-            
-            // Penalización por máxima desviación
-            const deviationPenalty = Math.min(maxDeviation / (canvas.width * 0.125), 1);
-            
-            // Ajuste final con curva suave
-            const rawAccuracy = baseAccuracy * (1 - 0.3 * deviationPenalty);
-            
-            return Math.min(Math.max(rawAccuracy, 0), 100);
-        }
-        
-        function updateProgressRing(percentage) {
-            const circumference = 2 * Math.PI * 45;
-            const offset = circumference - (percentage / 100) * circumference;
-            progressCircle.style.strokeDashoffset = offset;
-            
-            // Cambiar color basado en el porcentaje
-            if (percentage > 90) {
-                progressCircle.style.stroke = '#FF8C00';
-                progressCircle.style.filter = 'drop-shadow(0 0 10px rgba(255, 140, 0, 0.9))';
-            } else if (percentage > 70) {
-                progressCircle.style.stroke = '#FFA500';
-                progressCircle.style.filter = 'drop-shadow(0 0 8px rgba(255, 165, 0, 0.7))';
-            } else if (percentage > 50) {
-                progressCircle.style.stroke = '#FF6B00';
-                progressCircle.style.filter = 'drop-shadow(0 0 6px rgba(255, 107, 0, 0.5))';
-            } else {
-                progressCircle.style.stroke = '#FF4500';
-                progressCircle.style.filter = 'drop-shadow(0 0 4px rgba(255, 69, 0, 0.3))';
-            }
-        }
-        
-        function showAIFeedback(accuracy) {
-            const feedbacks = [
-                { min: 95, text: "¡Perfecto! Eres una máquina de dibujar círculos." },
-                { min: 85, text: "Excelente trabajo. Casi perfecto." },
-                { min: 75, text: "Muy buen círculo. Con práctica mejorarás." },
-                { min: 60, text: "Buen intento. Sigue practicando." },
-                { min: 40, text: "No está mal, pero puedes hacerlo mejor." },
-                { min: 20, text: "Sigue intentándolo. Concéntrate en la forma." },
-                { min: 0, text: "Todos empezamos así. ¡Sigue practicando!" }
-            ];
-            
-            const feedback = feedbacks.find(f => accuracy >= f.min)?.text || "¡Sigue intentándolo!";
-            feedbackDiv.textContent = feedback;
-            
-            // Animación del feedback
-            feedbackDiv.style.opacity = 0;
-            feedbackDiv.style.transform = 'translateY(10px)';
-            feedbackDiv.style.transition = 'none';
-            
-            setTimeout(() => {
-                feedbackDiv.style.transition = 'opacity 0.3s, transform 0.3s';
-                feedbackDiv.style.opacity = 1;
-                feedbackDiv.style.transform = 'translateY(0)';
-            }, 10);
-        }
-        
-        function reset() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.strokeStyle = '#FF8C00';
-            ctx.lineWidth = 4;
-            ctx.shadowBlur = 15;
-            ctx.shadowColor = 'rgba(255, 140, 0, 0.7)';
-            resultDiv.textContent = '';
-            feedbackDiv.textContent = '';
-            points = [];
-            isDrawing = false;
-            
-            // Resetear el anillo de progreso
-            progressCircle.style.strokeDashoffset = '282.743';
-            progressCircle.style.stroke = '#FF8C00';
-            progressCircle.style.filter = 'drop-shadow(0 0 5px rgba(255, 140, 0, 0.7))';
-        }
-        
-        function showLimitMessage() {
-            mainContainer.style.display = 'none';
-            limitMessage.style.display = 'flex';
-            
-            // Establecer el tiempo de espera (1 hora = 3600000 ms)
-            const waitTime = 3600000;
-            const endTime = Date.now() + waitTime;
-            
-            // Actualizar el temporizador cada segundo
-            updateTimer(endTime);
-            timerInterval = setInterval(() => updateTimer(endTime), 1000);
-            
-            // Configurar el timeout para cuando termine el tiempo de espera
-            cooldownTimeout = setTimeout(() => {
-                clearInterval(timerInterval);
-                attempts = 0;
-                localStorage.removeItem('circleAttempts');
-                localStorage.removeItem('lastAttemptTime');
-                limitMessage.style.display = 'none';
-                mainContainer.style.display = 'block';
-                reset();
-            }, waitTime);
-        }
-        
-        function updateTimer(endTime) {
-            const now = Date.now();
-            const remaining = Math.max(0, endTime - now);
-            
-            const hours = Math.floor(remaining / (1000 * 60 * 60));
-            const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((remaining % (1000 * 60)) / 1000);
-            
-            timerDisplay.textContent = 
-                `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-        }
-        
-        function checkAttemptLimit() {
-            const savedAttempts = localStorage.getItem('circleAttempts');
-            const lastAttemptTime = localStorage.getItem('lastAttemptTime');
-            
-            if (savedAttempts) {
-                attempts = parseInt(savedAttempts);
-                
-                // Verificar si ha pasado 1 hora desde el último intento
-                if (lastAttemptTime && (Date.now() - parseInt(lastAttemptTime)) < 3600000) {
-                    if (attempts >= 5) {
-                        showLimitMessage();
-                        
-                        // Calcular el tiempo restante
-                        const timePassed = Date.now() - parseInt(lastAttemptTime);
-                        const remainingTime = 3600000 - timePassed;
-                        
-                        // Configurar el timeout para el tiempo restante
-                        cooldownTimeout = setTimeout(() => {
-                            clearInterval(timerInterval);
-                            attempts = 0;
-                            localStorage.removeItem('circleAttempts');
-                            localStorage.removeItem('lastAttemptTime');
-                            limitMessage.style.display = 'none';
-                            mainContainer.style.display = 'block';
-                            reset();
-                        }, remainingTime);
-                        
-                        // Iniciar el temporizador
-                        const endTime = parseInt(lastAttemptTime) + 3600000;
-                        updateTimer(endTime);
-                        timerInterval = setInterval(() => updateTimer(endTime), 1000);
-                    }
-                } else {
-                    // Si ha pasado más de 1 hora, resetear los intentos
-                    attempts = 0;
-                    localStorage.removeItem('circleAttempts');
-                    localStorage.removeItem('lastAttemptTime');
-                }
-            }
-        }
-    </script>
 </body>
 </html>
